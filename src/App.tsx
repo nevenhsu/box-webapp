@@ -1,9 +1,9 @@
 import { useRef, useLayoutEffect } from 'react'
 import { gsap } from 'gsap'
 import { Canvas, useFrame, extend } from '@react-three/fiber'
-import { Effects, OrbitControls } from '@react-three/drei'
+import { Effects, OrbitControls, BakeShadows } from '@react-three/drei'
 import { UnrealBloomPass } from 'three-stdlib'
-import { Model as Model01 } from 'models/Planet_01'
+import { Model as Model0 } from 'models/Planet0'
 import type { Mesh } from 'three'
 
 extend({ UnrealBloomPass })
@@ -18,8 +18,8 @@ const Scene = () => {
 
   return (
     <>
-      <Model01 />
-      <ambientLight intensity={1} />
+      <Model0 />
+      <ambientLight intensity={0.12} />
     </>
   )
 }
@@ -42,8 +42,9 @@ const App = () => {
       <Canvas camera={{ fov: 70, position: [0, 0, 30] }}>
         <OrbitControls />
         <Scene />
+        <BakeShadows />
         <Effects>
-          <unrealBloomPass threshold={0.75} strength={1.5} radius={1} />
+          <unrealBloomPass threshold={0.75} strength={1} radius={0.5} />
         </Effects>
       </Canvas>
     </>

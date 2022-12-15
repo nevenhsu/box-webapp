@@ -825,6 +825,11 @@ meshline@^3.0.4:
   resolved "https://registry.yarnpkg.com/meshline/-/meshline-3.1.5.tgz#ad4571585f9ccf74b636dae95c3897bc69d8ba85"
   integrity sha512-r34DFkpI8pyMXy+8GNIVxOkJ62oHt7U93HUztm84V4yRo/g85yYQYmf9VPOW+CZlyKeR7MfPBFZv2Q9ZaeUasQ==
 
+misans@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/misans/-/misans-3.1.1.tgz#dbfad326525b1345e65e4f6c457d8d6f20285610"
+  integrity sha512-AMsMG702kgW+2A3ZuKruPpJvVtkSt+e14CuA9rB61A08pRUiPkIYiALGxLvVL7DcSp81d6korpTiUP2SzgTzrA==
+
 mmd-parser@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mmd-parser/-/mmd-parser-1.0.4.tgz#87cc05782cb5974ca854f0303fc5147bc9d690e7"
