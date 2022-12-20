@@ -15,6 +15,7 @@ export default function Cube(props: CubeProps) {
         height: size,
         objectFit: 'contain',
       }}
+      alt=""
     />
   )
 }

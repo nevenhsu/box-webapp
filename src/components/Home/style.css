@@ -1,0 +1,111 @@
+.line {
+  width: 160vw;
+  text-align: center;
+}
+
+.dust0 {
+  top: 30%;
+  left: 29%;
+}
+
+.dust1 {
+  top: 28%;
+  right: 29%;
+}
+
+.dust2 {
+  top: 44%;
+  left: 3%;
+}
+
+.dust3 {
+  top: 41%;
+  right: 1%;
+}
+
+.cube0 {
+  top: 29%;
+  left: 9%;
+}
+
+.cube1 {
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cube2 {
+  top: 27%;
+  right: 8%;
+}
+
+.cube3 {
+  top: 42%;
+  left: 13%;
+}
+
+.cube4 {
+  top: 45%;
+  right: 38%;
+}
+
+.cube5 {
+  top: 40%;
+  right: 11%;
+}
+
+@media screen and (min-width: 576px) {
+  .line {
+    width: 125vw;
+  }
+
+  .line-img {
+    position: relative;
+    top: 8vw;
+  }
+
+  .dust0 {
+    top: 30%;
+    left: 29%;
+  }
+
+  .dust1 {
+    top: 30%;
+    right: 24%;
+  }
+
+  .dust2 {
+    top: 36%;
+    left: 3%;
+  }
+
+  .dust3 {
+    top: 40%;
+    right: 1%;
+  }
+
+  .cube0 {
+    top: 35%;
+    left: 15%;
+  }
+
+  .cube2 {
+    top: 42%;
+    right: 26%;
+  }
+
+  .cube3 {
+    top: 55%;
+    left: 8%;
+  }
+
+  .cube4 {
+    top: 48%;
+    left: 32%;
+  }
+
+  .cube5 {
+    top: 54%;
+    right: 8%;
+  }
+}

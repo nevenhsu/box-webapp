@@ -3,15 +3,13 @@ import { gsap } from 'gsap'
 import { Center, Box, createStyles } from '@mantine/core'
 import Cube from './Cube'
 import { fillArray } from 'utils/helper'
+import { animations } from './data'
+import './style.css'
 
 const dusts = fillArray(4)
 const cubes = fillArray(6)
 
-const useStyles = createStyles((theme) => ({
-  item: {
-    position: 'absolute',
-  },
-}))
+const useStyles = createStyles((theme) => ({}))
 
 export default function Home() {
   const root = useRef<HTMLImageElement>(null)
@@ -24,50 +22,25 @@ export default function Home() {
       // init timeline
       const tl = gsap.timeline()
       tlRef.current = tl
-      // start line
-      tl.set('.line', {
+      // line
+      tl.set('.line-img', {
+        width: '0%',
+      })
+      tl.to('.line-img', {
         width: '100%',
+        duration: 2.5,
       })
-      // start dust
-      tl.set('.dust0', {
-        top: '30%',
-        left: '29%',
+      // cube & dust
+      animations.forEach((el) => {
+        tl.set(el.target, { opacity: 0 }, 0)
+        tl.to(el.target, { opacity: 1, duration: 0.75 }, el.sec)
       })
-      tl.set('.dust1', {
-        top: '28%',
-        right: '29%',
-      })
-      tl.set('.dust2', {
-        top: '44%',
-        left: '3%',
-      })
-      tl.set('.dust3', {
-        top: '41%',
-        right: '1%',
-      })
-      // start cube
-      tl.set('.cube0', {
-        top: '29%',
-        left: '9%',
-      })
-      tl.set('.cube1', {
-        top: '30%',
-      })
-      tl.set('.cube2', {
-        top: '27%',
-        right: '8%',
-      })
-      tl.set('.cube3', {
-        top: '42%',
-        left: '13%',
-      })
-      tl.set('.cube4', {
-        top: '45%',
-        right: '38%',
-      })
-      tl.set('.cube5', {
-        top: '40%',
-        right: '11%',
+
+      gsap.to('.cube', {
+        x: gsap.utils.random(-2, 2, 1, true),
+        y: gsap.utils.random(-2, 2, 1, true),
+        repeat: -1,
+        repeatRefresh: true,
       })
     }, root)
   }, [])
@@ -78,21 +51,16 @@ export default function Home() {
       sx={{ position: 'relative', width: '100vw', height: '100vh' }}
     >
       {/* Background */}
-      <Box
-        className="absolute-center"
-        sx={{
-          width: '160vw',
-          textAlign: 'center',
-        }}
-      >
+      <Box className="absolute-center line">
         <img
-          className="line"
+          className="line-img"
           src="/images/line.png"
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'contain',
           }}
+          alt=""
         />
       </Box>
 
@@ -102,7 +70,7 @@ export default function Home() {
         return (
           <Cube
             key={name}
-            className={`${classes.item} ${name} dust`}
+            className={`p-absolute cube ${name}`}
             name={name}
             size={36}
           />
@@ -115,7 +83,7 @@ export default function Home() {
         return (
           <Cube
             key={name}
-            className={`${classes.item} ${name} cube`}
+            className={`p-absolute cube ${name}`}
             name={name}
             size={72}
           />
