@@ -1,6 +1,41 @@
 .line {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.line-div {
   width: 160vw;
   text-align: center;
+}
+
+.line-img {
+  position: relative;
+  top: 5vw;
+}
+
+.gradient {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(255, 255, 255, 0) 40%
+  );
+}
+
+.circle {
+  opacity: 0;
+  top: 36% !important;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  background: radial-gradient(
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0) 75%
+  );
 }
 
 .dust0 {
@@ -55,13 +90,12 @@
 }
 
 @media screen and (min-width: 576px) {
-  .line {
+  .line-div {
     width: 125vw;
   }
 
   .line-img {
-    position: relative;
-    top: 8vw;
+    top: 10vw;
   }
 
   .dust0 {
