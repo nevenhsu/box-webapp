@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { Center, Box, createStyles } from '@mantine/core'
+import CarouselPage from 'components/CarouselPage'
 import Cube from './Cube'
 import { fillArray } from 'utils/helper'
 import { animations } from './data'
@@ -70,7 +71,7 @@ export default function Home() {
     <Center
       ref={root}
       sx={{ position: 'relative', width: '100vw', height: '100vh' }}
-      onClick={() => setOpen(!open)}
+      // onClick={() => setOpen(!open)}
     >
       {/* Background */}
       <div className="absolute-center line">
@@ -119,6 +120,16 @@ export default function Home() {
 
       {/* Circle */}
       <div className="absolute-center circle" />
+
+      <Box
+        className="absolute-center"
+        sx={{
+          width: '100vw',
+          height: '100vh',
+        }}
+      >
+        <CarouselPage open={open} />
+      </Box>
     </Center>
   )
 }

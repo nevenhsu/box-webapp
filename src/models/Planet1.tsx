@@ -9,19 +9,19 @@ import { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    赛博星球: THREE.Mesh
-    ['赛博星球-发光']: THREE.Mesh
+    鲸鱼星球: THREE.Mesh
+    ['鲸鱼星球-发光']: THREE.Mesh
   }
   materials: {
-    赛博星球: THREE.MeshPhysicalMaterial
-    ['赛博星球-发光']: THREE.MeshStandardMaterial
+    鲸鱼星球: THREE.MeshPhysicalMaterial
+    ['鲸鱼星球-发光']: THREE.MeshStandardMaterial
   }
 }
 
 export const Model = forwardRef<any>(
   (props: JSX.IntrinsicElements['group'], ref) => {
     const { nodes, materials } = useGLTF(
-      '/planet0.glb'
+      '/planet1.glb'
     ) as unknown as GLTFResult
     return (
       <group {...props} dispose={null} ref={ref}>
@@ -32,14 +32,14 @@ export const Model = forwardRef<any>(
           rotation={[-0.16, 0.53, -3.06]}
         />
         <mesh
-          geometry={nodes.赛博星球.geometry}
-          material={materials.赛博星球}
+          geometry={nodes.鲸鱼星球.geometry}
+          material={materials.鲸鱼星球}
           rotation={[Math.PI / 2, 0, 0]}
         />
         <mesh
-          geometry={nodes['赛博星球-发光'].geometry}
-          material={materials['赛博星球-发光']}
-          position={[1.8, 1.34, -4.36]}
+          geometry={nodes['鲸鱼星球-发光'].geometry}
+          material={materials['鲸鱼星球-发光']}
+          position={[3.97, 1.34, -0.01]}
           rotation={[Math.PI / 2, 0, 0]}
         />
       </group>
@@ -47,4 +47,4 @@ export const Model = forwardRef<any>(
   }
 )
 
-useGLTF.preload('/planet0.glb')
+useGLTF.preload('/planet1.glb')

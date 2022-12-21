@@ -16,6 +16,7 @@
     "@mantine/hooks": "^5.9.5",
     "@react-three/drei": "^9.46.4",
     "@react-three/fiber": "^8.9.1",
+    "@react-three/postprocessing": "^2.7.0",
     "embla-carousel-react": "^7.0.5",
     "gsap": "^3.11.3",
     "lodash": "^4.17.21",

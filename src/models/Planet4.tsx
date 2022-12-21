@@ -9,37 +9,36 @@ import { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    赛博星球: THREE.Mesh
-    ['赛博星球-发光']: THREE.Mesh
+    ['佛光星球-0']: THREE.Mesh
+    ball: THREE.Mesh
   }
   materials: {
-    赛博星球: THREE.MeshPhysicalMaterial
-    ['赛博星球-发光']: THREE.MeshStandardMaterial
+    palette: THREE.MeshStandardMaterial
+    ['palette.001']: THREE.MeshPhysicalMaterial
   }
 }
 
 export const Model = forwardRef<any>(
   (props: JSX.IntrinsicElements['group'], ref) => {
     const { nodes, materials } = useGLTF(
-      '/planet0.glb'
+      '/planet4.glb'
     ) as unknown as GLTFResult
     return (
       <group {...props} dispose={null} ref={ref}>
         <directionalLight
-          intensity={1}
-          color="#9fe9ff"
+          intensity={0.5}
+          color="#fae60a"
           position={[37.79, 10.09, 63.52]}
           rotation={[-0.16, 0.53, -3.06]}
         />
         <mesh
-          geometry={nodes.赛博星球.geometry}
-          material={materials.赛博星球}
+          geometry={nodes['佛光星球-0'].geometry}
+          material={materials.palette}
           rotation={[Math.PI / 2, 0, 0]}
         />
         <mesh
-          geometry={nodes['赛博星球-发光'].geometry}
-          material={materials['赛博星球-发光']}
-          position={[1.8, 1.34, -4.36]}
+          geometry={nodes.ball.geometry}
+          material={materials['palette.001']}
           rotation={[Math.PI / 2, 0, 0]}
         />
       </group>

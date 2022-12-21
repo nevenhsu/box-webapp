@@ -27,7 +27,7 @@
 
 .circle {
   opacity: 0;
-  top: 36% !important;
+  top: calc(30% + 36px) !important;
   width: 96px;
   height: 96px;
   border-radius: 50%;
