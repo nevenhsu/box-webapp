@@ -71,7 +71,7 @@ export default function Home() {
     <Center
       ref={root}
       sx={{ position: 'relative', width: '100vw', height: '100vh' }}
-      // onClick={() => setOpen(!open)}
+      onClick={() => setOpen(!open)}
     >
       {/* Background */}
       <div className="absolute-center line">
@@ -121,7 +121,7 @@ export default function Home() {
       {/* Circle */}
       <div className="absolute-center circle" />
 
-      <Box
+      {/* <Box
         className="absolute-center"
         sx={{
           width: '100vw',
@@ -129,7 +129,7 @@ export default function Home() {
         }}
       >
         <CarouselPage open={open} />
-      </Box>
+      </Box> */}
     </Center>
   )
 }

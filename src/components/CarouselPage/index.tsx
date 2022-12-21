@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Box, Center } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import Scene3d from 'components/Scene3d'
@@ -7,7 +8,7 @@ import { Model as Planet1 } from 'models/Planet1'
 import { Model as Planet2 } from 'models/Planet2'
 import { Model as Planet3 } from 'models/Planet3'
 import { Model as Planet4 } from 'models/Planet4'
-import type { Scene3dProps } from 'components/Scene3d'
+import type { SceneProps } from 'components/Scene3d'
 
 type CarouselPageProps = {
   open: boolean
@@ -15,10 +16,13 @@ type CarouselPageProps = {
 
 type Detail = {
   key: string
-  sceneProps: Scene3dProps
+  sceneProps: SceneProps
 }
 
-type DetailProps = CarouselPageProps & Detail
+type DetailProps = Detail & {
+  open: boolean
+  active: boolean
+}
 
 const slides: Detail[] = [
   {
@@ -64,7 +68,7 @@ const slides: Detail[] = [
 ]
 
 function Detail(props: DetailProps) {
-  const { sceneProps } = props
+  const { sceneProps, open, active } = props
   return (
     <Center sx={{ width: '100%', height: '100%' }}>
       {/* Ratio: 1 */}
@@ -77,23 +81,28 @@ function Detail(props: DetailProps) {
         }}
       >
         <Box className="absolute-center" sx={{ width: '100%', height: '100%' }}>
-          <Scene3d {...sceneProps} />
+          <Scene3d {...sceneProps} visible={active} />
         </Box>
       </Box>
     </Center>
   )
 }
 
+const initialSlide = 1
+
 export default function CarouselPage(props: CarouselPageProps) {
   const { open } = props
+  const [slide, setSlide] = useState(initialSlide)
+
   return (
     <Box>
       <Carousel
-        initialSlide={1}
+        initialSlide={initialSlide}
         slideGap="xs"
         slideSize="60%"
         height="100vh"
         draggable={false}
+        onSlideChange={(index) => setSlide(index)}
         loop
         styles={{
           controls: {
@@ -112,9 +121,9 @@ export default function CarouselPage(props: CarouselPageProps) {
           },
         }}
       >
-        {slides.map((el) => (
+        {slides.map((el, i) => (
           <Carousel.Slide key={el.key}>
-            <Detail {...el} open={open} />
+            <Detail {...el} open={open} active={i === slide} />
           </Carousel.Slide>
         ))}
       </Carousel>

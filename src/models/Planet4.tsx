@@ -46,4 +46,4 @@ export const Model = forwardRef<any>(
   }
 )
 
-useGLTF.preload('/planet0.glb')
+useGLTF.preload('/planet4.glb')

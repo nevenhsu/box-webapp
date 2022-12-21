@@ -1,22 +1,20 @@
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, BakeShadows } from '@react-three/drei'
-import {
-  EffectComposer,
-  DepthOfField,
-  Bloom,
-  Noise,
-  Vignette,
-} from '@react-three/postprocessing'
+import { OrbitControls } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import type { Group } from 'three'
 
 export type ModelProps = {
   renderModel: (ref: React.RefObject<Group>) => JSX.Element
 }
 
-export type Scene3dProps = ModelProps & {
+export type SceneProps = ModelProps & {
   intensity: number
   z: number
+}
+
+export type Scene3dProps = SceneProps & {
+  visible: boolean
 }
 
 function Model(props: ModelProps) {
@@ -34,18 +32,19 @@ function Model(props: ModelProps) {
 }
 
 export default function Scene3d(props: Scene3dProps) {
-  const { intensity, z, renderModel } = props
+  const { intensity, z, visible, renderModel } = props
   return (
-    <>
+    <Suspense fallback={null}>
       <Canvas camera={{ fov: 70, position: [0, 0, z] }}>
         <OrbitControls enableZoom={false} enablePan={false} />
-        <Model renderModel={renderModel} />
-        <ambientLight intensity={intensity} />
-        <BakeShadows />
+        <group visible={visible}>
+          <Model renderModel={renderModel} />
+        </group>
+        <ambientLight intensity={intensity} visible={visible} />
         <EffectComposer>
           <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} />
         </EffectComposer>
       </Canvas>
-    </>
+    </Suspense>
   )
 }
