@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import { gsap } from 'gsap'
-import { Center, Box, createStyles } from '@mantine/core'
+import { Center, Box, Modal } from '@mantine/core'
 import CarouselPage from 'components/CarouselPage'
 import Cube from './Cube'
 import { fillArray } from 'utils/helper'
@@ -10,11 +10,7 @@ import './style.css'
 const dusts = fillArray(4)
 const cubes = fillArray(6)
 
-const useStyles = createStyles((theme) => ({}))
-
 export default function Home() {
-  const { classes } = useStyles()
-
   const root = useRef<HTMLImageElement>(null)
   const tlRef = useRef<gsap.core.Timeline>()
   const [open, setOpen] = useState(false)
@@ -55,9 +51,6 @@ export default function Home() {
           .to('.line-img', { top: '50vw', duration: 1.5 }, delay)
           .to('.gradient', { opacity: 1, duration: 0.75 }, delay)
           .to('.cube', { opacity: 0, duration: 0.75 }, delay)
-
-        // stop
-        tlRef.current.pause()
       }
       if (open) {
         tlRef.current.play()
@@ -71,7 +64,6 @@ export default function Home() {
     <Center
       ref={root}
       sx={{ position: 'relative', width: '100vw', height: '100vh' }}
-      onClick={() => setOpen(!open)}
     >
       {/* Background */}
       <div className="absolute-center line">
@@ -98,9 +90,9 @@ export default function Home() {
         return (
           <Cube
             key={name}
-            className={`p-absolute cube ${name}`}
             name={name}
             size={36}
+            className={`p-absolute cube ${name}`}
           />
         )
       })}
@@ -111,7 +103,8 @@ export default function Home() {
         return (
           <Cube
             key={name}
-            className={`p-absolute cube ${name}`}
+            className={`p-absolute cube ${name} c-pointer`}
+            onClick={() => setOpen(true)}
             name={name}
             size={72}
           />
@@ -119,17 +112,24 @@ export default function Home() {
       })}
 
       {/* Circle */}
-      <div className="absolute-center circle" />
+      <div className="absolute-center circle pointer-events-none" />
 
-      {/* <Box
-        className="absolute-center"
-        sx={{
-          width: '100vw',
-          height: '100vh',
+      {/* Details */}
+      <Modal
+        opened={open}
+        onClose={() => setOpen(false)}
+        fullScreen
+        transitionDuration={750}
+        exitTransitionDuration={1000}
+        styles={{
+          modal: {
+            background: 'transparent',
+            padding: '0 !important',
+          },
         }}
       >
         <CarouselPage open={open} />
-      </Box> */}
+      </Modal>
     </Center>
   )
 }

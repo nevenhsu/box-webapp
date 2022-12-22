@@ -43,3 +43,15 @@ a {
 .p-absolute {
   position: absolute;
 }
+
+.p-fixed {
+  position: fixed;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.c-pointer {
+  cursor: pointer;
+}

@@ -1,14 +1,13 @@
-type CubeProps = {
+type CubeProps = React.HTMLAttributes<HTMLImageElement> & {
   name: string
-  className: string
   size: number
 }
 
 export default function Cube(props: CubeProps) {
-  const { className, name, size } = props
+  const { name, size, ...rest } = props
   return (
     <img
-      className={className}
+      className=""
       src={`/images/${name}.png`}
       style={{
         width: size,
@@ -16,6 +15,7 @@ export default function Cube(props: CubeProps) {
         objectFit: 'contain',
       }}
       alt=""
+      {...rest}
     />
   )
 }
