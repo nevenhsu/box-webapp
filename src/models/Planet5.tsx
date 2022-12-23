@@ -20,6 +20,7 @@ type GLTFResult = GLTF & {
 
 export const Model = forwardRef<any>(
   (props: JSX.IntrinsicElements['group'], ref) => {
+    useGLTF.preload('/planet5.glb')
     const { nodes, materials } = useGLTF(
       '/planet5.glb'
     ) as unknown as GLTFResult
@@ -45,5 +46,3 @@ export const Model = forwardRef<any>(
     )
   }
 )
-
-useGLTF.preload('/planet5.glb')

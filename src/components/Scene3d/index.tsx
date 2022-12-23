@@ -1,19 +1,21 @@
 import { Suspense, useRef } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import type { Group } from 'three'
 
-export type ModelProps = {
+type ModelProps = {
   renderModel: (ref: React.RefObject<Group>) => JSX.Element
 }
 
 export type SceneProps = ModelProps & {
-  intensity: number
   z: number
+  intensity: number
+  fallback?: JSX.Element
 }
 
-export type Scene3dProps = SceneProps & {
+type Scene3dProps = SceneProps & {
   visible: boolean
 }
 
@@ -32,19 +34,26 @@ function Model(props: ModelProps) {
 }
 
 export default function Scene3d(props: Scene3dProps) {
-  const { intensity, z, visible, renderModel } = props
+  const { intensity, z, fallback, visible, renderModel } = props
   return (
-    <Suspense fallback={null}>
-      <Canvas camera={{ fov: 70, position: [0, 0, z] }}>
-        <OrbitControls enableZoom={false} enablePan={false} />
-        <group visible={visible}>
-          <Model renderModel={renderModel} />
-        </group>
-        <ambientLight intensity={intensity} visible={visible} />
-        <EffectComposer>
-          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} />
-        </EffectComposer>
-      </Canvas>
-    </Suspense>
+    <ErrorBoundary
+      FallbackComponent={(error) => {
+        console.error(error)
+        return <>{fallback ?? null}</>
+      }}
+    >
+      <Suspense fallback={fallback ?? null}>
+        <Canvas className="canvas" camera={{ fov: 70, position: [0, 0, z] }}>
+          <OrbitControls enableZoom={false} enablePan={false} />
+          <group visible={visible}>
+            <Model renderModel={renderModel} />
+          </group>
+          <ambientLight intensity={intensity} visible={visible} />
+          <EffectComposer>
+            <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} />
+          </EffectComposer>
+        </Canvas>
+      </Suspense>
+    </ErrorBoundary>
   )
 }

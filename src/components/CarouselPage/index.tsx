@@ -5,7 +5,6 @@ import { Box, Center } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import Scene3d from 'components/Scene3d'
 // models
-import { Model as Cube3d } from 'models/Cube3d'
 import { Model as Planet0 } from 'models/Planet0'
 import { Model as Planet1 } from 'models/Planet1'
 import { Model as Planet2 } from 'models/Planet2'
@@ -13,7 +12,7 @@ import { Model as Planet3 } from 'models/Planet3'
 import { Model as Planet4 } from 'models/Planet4'
 import { Model as Planet5 } from 'models/Planet5'
 import type { SceneProps } from 'components/Scene3d'
-import type { BoxProps } from '@mantine/core'
+import './style.css'
 
 type CarouselPageProps = {
   open: boolean
@@ -31,53 +30,61 @@ type DetailProps = Detail & {
 }
 
 const initialSlide = 1
-
+const Fallback = (props: { src: string; style?: React.CSSProperties }) => (
+  <img className="fallback" src={props.src} style={props.style} alt="" />
+)
 const slides: Detail[] = [
   {
-    key: 'Planet0',
+    key: 'planet0',
     sceneProps: {
-      z: 36,
+      z: 35,
       intensity: 2,
+      fallback: <Fallback src="/render/planet0.png" />,
       renderModel: (ref) => <Planet0 ref={ref} />,
     },
   },
   {
-    key: 'Planet1',
+    key: 'planet1',
     sceneProps: {
       z: 23.5,
       intensity: 2,
+      fallback: <Fallback src="/render/planet1.png" />,
       renderModel: (ref) => <Planet1 ref={ref} />,
     },
   },
   {
-    key: 'Planet2',
+    key: 'planet2',
     sceneProps: {
-      z: 35,
-      intensity: 2,
+      z: 32,
+      intensity: 0.5,
+      fallback: <Fallback src="/render/planet2.png" style={{ padding: 32 }} />,
       renderModel: (ref) => <Planet2 ref={ref} />,
     },
   },
   {
-    key: 'Planet3',
+    key: 'planet3',
     sceneProps: {
       z: 34,
       intensity: 1,
+      fallback: <Fallback src="/render/planet3.png" />,
       renderModel: (ref) => <Planet3 ref={ref} />,
     },
   },
   {
-    key: 'Planet4',
+    key: 'planet4',
     sceneProps: {
-      z: 32,
-      intensity: 0.5,
+      z: 36,
+      intensity: 2,
+      fallback: <Fallback src="/render/planet4.png" style={{ padding: 8 }} />,
       renderModel: (ref) => <Planet4 ref={ref} />,
     },
   },
   {
-    key: 'Planet5',
+    key: 'planet5',
     sceneProps: {
       z: 32,
       intensity: 4,
+      fallback: <Fallback src="/render/planet5.png" />,
       renderModel: (ref) => <Planet5 ref={ref} />,
     },
   },
@@ -95,12 +102,14 @@ function Detail(props: DetailProps) {
       if (!tlRef.current) {
         tlRef.current = gsap.timeline()
       }
+      const tween: gsap.TweenVars = {
+        scale: show ? 1 : 0.95,
+        duration: 0.75,
+        delay: 1,
+      }
       if (open) {
-        tlRef.current.to('canvas', {
-          scale: show ? 1 : 0.95,
-          duration: 0.75,
-          delay: 1,
-        })
+        tlRef.current.to('canvas', tween, 0)
+        tlRef.current.to('.fallback', tween, 0)
       }
     }, root)
   }, [open, show])
@@ -156,7 +165,11 @@ export default function CarouselPage(props: CarouselPageProps) {
     const ctx = gsap.context(() => {
       // init timeline
       if (!tlRef.current) {
-        tlRef.current = gsap.timeline().to('canvas', { scale: 1, duration: 1 })
+        const tween: gsap.TweenVars = { scale: 1, duration: 1 }
+        tlRef.current = gsap
+          .timeline()
+          .to('canvas', tween, 0)
+          .to('.fallback', tween, 0)
       }
       if (open) {
         tlRef.current.play()

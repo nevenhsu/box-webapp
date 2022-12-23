@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import { gsap } from 'gsap'
-import { Center, Box, Modal } from '@mantine/core'
+import { Box, Center, CloseButton, Modal } from '@mantine/core'
 import CarouselPage from 'components/CarouselPage'
 import Cube from './Cube'
 import { fillArray } from 'utils/helper'
@@ -45,8 +45,6 @@ export default function Home() {
         const delay = 0.5
         tlRef.current = gsap
           .timeline()
-          .to('.circle', { opacity: 1, duration: delay }, 0)
-          .to('.circle', { opacity: 0, duration: 0.75 }, delay + 0.1)
           .to('.line-div', { width: '240vw', duration: 1.5 }, delay)
           .to('.line-img', { top: '50vw', duration: 1.5 }, delay)
           .to('.gradient', { opacity: 1, duration: 0.75 }, delay)
@@ -59,6 +57,18 @@ export default function Home() {
       }
     }, root)
   }, [open])
+
+  const handleClickCube: React.MouseEventHandler<HTMLImageElement> = (
+    event
+  ) => {
+    setOpen(true)
+    gsap.set('.circle', {
+      x: event.clientX,
+      y: event.clientY,
+    })
+    gsap.to('.circle', { opacity: 1, duration: 0.75 })
+    gsap.to('.circle', { opacity: 0, duration: 0.75, delay: 0.75 })
+  }
 
   return (
     <Center
@@ -101,18 +111,28 @@ export default function Home() {
       {cubes.map((o, i) => {
         const name = `cube${i}`
         return (
-          <Cube
+          <span
             key={name}
             className={`p-absolute cube ${name} c-pointer`}
-            onClick={() => setOpen(true)}
-            name={name}
-            size={72}
-          />
+            style={{
+              width: 72,
+              height: 72,
+            }}
+          >
+            <Cube
+              className="cube-img"
+              onClick={handleClickCube}
+              name={name}
+              size={72}
+            />
+          </span>
         )
       })}
 
       {/* Circle */}
-      <div className="absolute-center circle pointer-events-none" />
+      <div className="circle pointer-events-none">
+        <div className="circle-div absolute-center" />
+      </div>
 
       {/* Details */}
       <Modal
@@ -121,6 +141,7 @@ export default function Home() {
         fullScreen
         transitionDuration={750}
         exitTransitionDuration={1000}
+        withCloseButton={false}
         styles={{
           modal: {
             background: 'transparent',
@@ -128,7 +149,21 @@ export default function Home() {
           },
         }}
       >
-        <CarouselPage open={open} />
+        <>
+          <CarouselPage open={open} />
+          <Box
+            sx={{
+              position: 'fixed',
+              zIndex: 1,
+              top: 20,
+              left: 24,
+              border: '1px solid white',
+              borderRadius: 99,
+            }}
+          >
+            <CloseButton onClick={() => setOpen(false)} />
+          </Box>
+        </>
       </Modal>
     </Center>
   )

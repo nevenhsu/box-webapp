@@ -7,7 +7,6 @@ export default function Cube(props: CubeProps) {
   const { name, size, ...rest } = props
   return (
     <img
-      className=""
       src={`/images/${name}.png`}
       style={{
         width: size,

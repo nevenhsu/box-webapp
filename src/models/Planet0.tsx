@@ -9,42 +9,42 @@ import { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
   nodes: {
-    赛博星球: THREE.Mesh
-    ['赛博星球-发光']: THREE.Mesh
+    科技星球: THREE.Mesh
+    ['科技星球-发光']: THREE.Mesh
   }
   materials: {
-    赛博星球: THREE.MeshPhysicalMaterial
-    ['赛博星球-发光']: THREE.MeshStandardMaterial
+    科技星球: THREE.MeshPhysicalMaterial
+    科技星球发光: THREE.MeshStandardMaterial
   }
 }
 
 export const Model = forwardRef<any>(
   (props: JSX.IntrinsicElements['group'], ref) => {
+    useGLTF.preload('/planet0.glb')
     const { nodes, materials } = useGLTF(
       '/planet0.glb'
     ) as unknown as GLTFResult
     return (
-      <group {...props} dispose={null} ref={ref} rotation={[Math.PI / 6, 0, 0]}>
+      <group {...props} dispose={null} ref={ref} rotation={[Math.PI / 8, 0, 0]}>
         <directionalLight
-          intensity={1}
-          color="#9fe9ff"
-          position={[37.79, 10.09, 63.52]}
-          rotation={[-0.16, 0.53, -3.06]}
+          intensity={2}
+          color="#ff63f7"
+          position={[35.33, 10.09, 64.93]}
+          rotation={[-0.15, 0.49, -3.07]}
         />
         <mesh
-          geometry={nodes.赛博星球.geometry}
-          material={materials.赛博星球}
+          geometry={nodes.科技星球.geometry}
+          material={materials.科技星球}
+          position={[0, -15, 0]}
           rotation={[Math.PI / 2, 0, 0]}
         />
         <mesh
-          geometry={nodes['赛博星球-发光'].geometry}
-          material={materials['赛博星球-发光']}
-          position={[1.8, 1.34, -4.36]}
+          geometry={nodes['科技星球-发光'].geometry}
+          material={materials.科技星球发光}
+          position={[0, -15, 0]}
           rotation={[Math.PI / 2, 0, 0]}
         />
       </group>
     )
   }
 )
-
-useGLTF.preload('/planet0.glb')
