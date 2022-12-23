@@ -24,20 +24,12 @@ export const Model = forwardRef<any>(
       '/planet5.glb'
     ) as unknown as GLTFResult
     return (
-      <group {...props} dispose={null}>
+      <group {...props} dispose={null} rotation={[Math.PI / 6, 0, 0]}>
         <directionalLight
           intensity={0.5}
           color="#ff412a"
           position={[35.33, 10.09, 64.93]}
           rotation={[-0.15, 0.49, -3.07]}
-        />
-        <PerspectiveCamera
-          makeDefault={false}
-          far={100}
-          near={0.1}
-          fov={39.6}
-          position={[4.86, 14.02, 55.91]}
-          rotation={[-0.27, 0.08, 0.02]}
         />
         <mesh
           geometry={nodes['mass星球-火箭发光体'].geometry}

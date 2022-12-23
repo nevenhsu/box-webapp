@@ -24,7 +24,7 @@ export const Model = forwardRef<any>(
       '/planet0.glb'
     ) as unknown as GLTFResult
     return (
-      <group {...props} dispose={null} ref={ref}>
+      <group {...props} dispose={null} ref={ref} rotation={[Math.PI / 6, 0, 0]}>
         <directionalLight
           intensity={1}
           color="#9fe9ff"

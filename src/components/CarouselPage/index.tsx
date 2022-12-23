@@ -36,49 +36,49 @@ const slides: Detail[] = [
   {
     key: 'Planet0',
     sceneProps: {
-      z: 35, // 35,
+      z: 36,
       intensity: 2,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref) => <Planet0 ref={ref} />,
     },
   },
   {
     key: 'Planet1',
     sceneProps: {
-      z: 35, // 23.5,
+      z: 23.5,
       intensity: 2,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref) => <Planet1 ref={ref} />,
     },
   },
   {
     key: 'Planet2',
     sceneProps: {
-      z: 35, //  35,
+      z: 35,
       intensity: 2,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref) => <Planet2 ref={ref} />,
     },
   },
   {
     key: 'Planet3',
     sceneProps: {
-      z: 35, //  34,
+      z: 34,
       intensity: 1,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref) => <Planet3 ref={ref} />,
     },
   },
   {
     key: 'Planet4',
     sceneProps: {
-      z: 35, //  32,
+      z: 32,
       intensity: 0.5,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref) => <Planet4 ref={ref} />,
     },
   },
   {
     key: 'Planet5',
     sceneProps: {
-      z: 35, //  32,
-      intensity: 0.5,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      z: 32,
+      intensity: 4,
+      renderModel: (ref) => <Planet5 ref={ref} />,
     },
   },
 ]

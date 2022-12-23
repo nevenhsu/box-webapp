@@ -24,7 +24,7 @@ export const Model = forwardRef<any>(
       '/planet2.glb'
     ) as unknown as GLTFResult
     return (
-      <group {...props} dispose={null} ref={ref}>
+      <group {...props} dispose={null} ref={ref} rotation={[Math.PI / 8, 0, 0]}>
         <directionalLight
           intensity={2}
           color="#ff63f7"
@@ -34,13 +34,13 @@ export const Model = forwardRef<any>(
         <mesh
           geometry={nodes.科技星球.geometry}
           material={materials.科技星球}
-          position={[0, -12.9, 0]}
+          position={[0, -15, 0]}
           rotation={[Math.PI / 2, 0, 0]}
         />
         <mesh
           geometry={nodes['科技星球-发光'].geometry}
           material={materials.科技星球发光}
-          position={[0, -12.9, 0]}
+          position={[0, -15, 0]}
           rotation={[Math.PI / 2, 0, 0]}
         />
       </group>
