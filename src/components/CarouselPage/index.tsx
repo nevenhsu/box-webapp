@@ -5,6 +5,7 @@ import { Box, Center } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import Scene3d from 'components/Scene3d'
 // models
+import { Model as Cube3d } from 'models/Cube3d'
 import { Model as Planet0 } from 'models/Planet0'
 import { Model as Planet1 } from 'models/Planet1'
 import { Model as Planet2 } from 'models/Planet2'
@@ -40,7 +41,7 @@ const slides: Detail[] = [
       z: 35,
       intensity: 2,
       fallback: <Fallback src="/render/planet0.png" />,
-      renderModel: (ref) => <Planet0 ref={ref} />,
+      renderModel: (ref) => <Cube3d ref={ref} />,
     },
   },
   {
@@ -49,7 +50,7 @@ const slides: Detail[] = [
       z: 23.5,
       intensity: 2,
       fallback: <Fallback src="/render/planet1.png" />,
-      renderModel: (ref) => <Planet1 ref={ref} />,
+      renderModel: (ref) => <Cube3d ref={ref} />,
     },
   },
   {
@@ -58,7 +59,7 @@ const slides: Detail[] = [
       z: 32,
       intensity: 0.5,
       fallback: <Fallback src="/render/planet2.png" style={{ padding: 32 }} />,
-      renderModel: (ref) => <Planet2 ref={ref} />,
+      renderModel: (ref) => <Cube3d ref={ref} />,
     },
   },
   {
@@ -67,7 +68,7 @@ const slides: Detail[] = [
       z: 34,
       intensity: 1,
       fallback: <Fallback src="/render/planet3.png" />,
-      renderModel: (ref) => <Planet3 ref={ref} />,
+      renderModel: (ref) => <Cube3d ref={ref} />,
     },
   },
   {
@@ -76,7 +77,7 @@ const slides: Detail[] = [
       z: 36,
       intensity: 2,
       fallback: <Fallback src="/render/planet4.png" style={{ padding: 8 }} />,
-      renderModel: (ref) => <Planet4 ref={ref} />,
+      renderModel: (ref) => <Cube3d ref={ref} />,
     },
   },
   {
@@ -85,7 +86,7 @@ const slides: Detail[] = [
       z: 32,
       intensity: 4,
       fallback: <Fallback src="/render/planet5.png" />,
-      renderModel: (ref) => <Planet5 ref={ref} />,
+      renderModel: (ref) => <Cube3d ref={ref} />,
     },
   },
 ]

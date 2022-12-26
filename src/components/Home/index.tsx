@@ -2,7 +2,12 @@ import { useRef, useLayoutEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { Box, Center, CloseButton, Modal } from '@mantine/core'
 import CarouselPage from 'components/CarouselPage'
+import TopBar from './TopBar'
 import Cube from './Cube'
+import Sect1 from './Sect1'
+import Sect2 from './Sect2'
+import Sect3 from './Sect3'
+import Sect4 from './Sect4'
 import { fillArray } from 'utils/helper'
 import { animations } from './data'
 import './style.css'
@@ -71,100 +76,123 @@ export default function Home() {
   }
 
   return (
-    <Center
-      ref={root}
-      sx={{ position: 'relative', width: '100vw', height: '100vh' }}
-    >
-      {/* Background */}
-      <div className="absolute-center line">
-        <div className="absolute-center line-div">
-          <img
-            className="line-img"
-            src="/images/line.png"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-            }}
-            alt=""
-          />
-        </div>
-      </div>
+    <>
+      <TopBar />
 
-      {/* Gradient */}
-      <div className="absolute-center gradient" />
-
-      {/* Dust */}
-      {dusts.map((o, i) => {
-        const name = `dust${i}`
-        return (
-          <Cube
-            key={name}
-            name={name}
-            size={36}
-            className={`p-absolute cube ${name}`}
-          />
-        )
-      })}
-
-      {/* Cubes */}
-      {cubes.map((o, i) => {
-        const name = `cube${i}`
-        return (
-          <span
-            key={name}
-            className={`p-absolute cube ${name} c-pointer`}
-            style={{
-              width: 72,
-              height: 72,
-            }}
-          >
-            <Cube
-              className="cube-img"
-              onClick={handleClickCube}
-              name={name}
-              size={72}
-            />
-          </span>
-        )
-      })}
-
-      {/* Circle */}
-      <div className="circle pointer-events-none">
-        <div className="circle-div absolute-center" />
-      </div>
-
-      {/* Details */}
-      <Modal
-        opened={open}
-        onClose={() => setOpen(false)}
-        fullScreen
-        transitionDuration={750}
-        exitTransitionDuration={1000}
-        withCloseButton={false}
-        styles={{
-          modal: {
-            background: 'transparent',
-            padding: '0 !important',
-          },
-        }}
+      <Center
+        ref={root}
+        sx={{ position: 'relative', width: '100vw', height: '100vh' }}
       >
-        <>
-          <CarouselPage open={open} />
-          <Box
-            sx={{
-              position: 'fixed',
-              zIndex: 1,
-              top: 20,
-              left: 24,
-              border: '1px solid white',
-              borderRadius: 99,
-            }}
-          >
-            <CloseButton onClick={() => setOpen(false)} />
-          </Box>
-        </>
-      </Modal>
-    </Center>
+        {/* Background */}
+        <div className="absolute-center line">
+          <div className="absolute-center line-div">
+            <img
+              className="line-img"
+              src="/images/line.png"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
+              alt=""
+            />
+          </div>
+        </div>
+
+        {/* Gradient */}
+        <div className="absolute-center gradient" />
+
+        {/* Dust */}
+        {dusts.map((o, i) => {
+          const name = `dust${i}`
+          return (
+            <Cube
+              key={name}
+              name={name}
+              size={36}
+              className={`p-absolute cube ${name}`}
+            />
+          )
+        })}
+
+        {/* Cubes */}
+        {cubes.map((o, i) => {
+          const name = `cube${i}`
+          return (
+            <span
+              key={name}
+              className={`p-absolute cube ${name} c-pointer`}
+              style={{
+                width: 72,
+                height: 72,
+              }}
+            >
+              <Cube
+                className="cube-img"
+                onClick={handleClickCube}
+                name={name}
+                size={72}
+              />
+            </span>
+          )
+        })}
+
+        {/* Circle */}
+        <div className="circle pointer-events-none">
+          <div className="circle-div absolute-center" />
+        </div>
+
+        {/* Details */}
+        <Modal
+          opened={open}
+          onClose={() => setOpen(false)}
+          fullScreen
+          transitionDuration={750}
+          exitTransitionDuration={1000}
+          withCloseButton={false}
+          styles={{
+            modal: {
+              background: 'transparent',
+              padding: '0 !important',
+            },
+          }}
+        >
+          <>
+            <CarouselPage open={open} />
+            <Box
+              sx={{
+                position: 'fixed',
+                zIndex: 1,
+                top: 20,
+                left: 24,
+                border: '1px solid white',
+                borderRadius: 99,
+              }}
+            >
+              <CloseButton onClick={() => setOpen(false)} />
+            </Box>
+          </>
+        </Modal>
+      </Center>
+
+      <Sections />
+    </>
+  )
+}
+
+function Sections() {
+  return (
+    <>
+      <Box px={16}>
+        <Sect1 />
+      </Box>
+      <Sect2 />
+      <Box px={16}>
+        <Sect3 />
+      </Box>
+      <Box px={16}>
+        <Sect4 />
+      </Box>
+    </>
   )
 }

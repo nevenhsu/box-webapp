@@ -1,6 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500&display=swap');
 @import 'misans/lib/misans-300-light.min.css';
 @import 'misans/lib/misans-400-normal.min.css';
+@import 'misans/lib/misans-500-medium.min.css';
 
 html,
 body {
@@ -59,4 +60,8 @@ button:focus {
 
 .c-pointer {
   cursor: pointer;
+}
+
+.object-fit-cover {
+  object-fit: cover;
 }
