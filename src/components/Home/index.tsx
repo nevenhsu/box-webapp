@@ -28,6 +28,15 @@ export default function Home() {
   const [load, setLoad] = useState(false)
 
   useLayoutEffect(() => {
+    // hide images
+    gsap.set('.line-img', { width: '0%' })
+    //  hide cube & dust
+    animations.forEach((el) => {
+      gsap.set(el.target, { opacity: 0 })
+    })
+  }, [])
+
+  useLayoutEffect(() => {
     // loading
     if (!load) return
 
