@@ -19,7 +19,7 @@ type CellProps = {
 const data: CellProps[] = [
   {
     key: '0',
-    img: <Svg0 height="100%" />,
+    img: <Svg0 width="100%" height="100%" />,
     content:
       '学习使用Box3引擎，你可以使用我们独家研发的模型编辑器和场景编辑器，创建属于你自己的元宇宙空间。将自己的想法的商业场景创造出来，让其更加有趣和炫酷。',
     links: [
@@ -29,7 +29,7 @@ const data: CellProps[] = [
   },
   {
     key: '1',
-    img: <Svg1 height="100%" />,
+    img: <Svg1 width="100%" height="100%" />,
     content:
       '神奇代码岛作为box3引擎的创作者社区，每个月都有上百万的用户在其中活跃，快来加入社区，共同创作有趣有料的新项目。',
     links: [{ txt: '访问社区', link: '' }],
@@ -80,7 +80,9 @@ function Cell(props: CellProps) {
           </Box>
           {matchesLarge ? (
             <>
-              <Box h={212}>{img}</Box>
+              <Box w="50%" maw={212}>
+                {img}
+              </Box>
             </>
           ) : null}
         </Center>

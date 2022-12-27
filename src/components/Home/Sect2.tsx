@@ -74,7 +74,7 @@ function Cell(props: CellProps) {
 export default function Sect2() {
   const matches = useMediaQuery('(min-width: 576px)')
   const size = matches ? '40%' : '80%'
-  const autoplay = useRef(Autoplay({ delay: 6000 }))
+  const autoplay = useRef(Autoplay({ delay: 3000 }))
   const [embla, setEmbla] = useState<Embla | null>(null)
 
   useEffect(() => {

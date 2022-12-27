@@ -13,9 +13,11 @@ export default function TopBar(props: TopBarProps) {
       bg="transparent"
       display="flex"
       fixed
+      zIndex={100}
       sx={{
         alignItems: 'center',
         justifyContent: 'space-between',
+        backdropFilter: 'saturate(180%) blur(20px)',
       }}
     >
       <img src="/images/logo.svg" height={12} />
