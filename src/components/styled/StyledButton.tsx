@@ -14,6 +14,14 @@ const _StyledButton = styled(Button, {
     color,
     borderColor: color,
     fontWeight: 400,
+    '&:hover': {
+      color: '#ddd',
+      backgroundColor: 'transparent',
+    },
+    '&:active': {
+      backgroundColor: 'transparent',
+    },
+    transition: 'all 250ms',
   }
 })
 
