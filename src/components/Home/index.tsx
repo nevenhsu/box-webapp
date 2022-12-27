@@ -8,6 +8,8 @@ import Sect1 from './Sect1'
 import Sect2 from './Sect2'
 import Sect3 from './Sect3'
 import Sect4 from './Sect4'
+import Sect5 from './Sect5'
+import Sect6 from './Sect6'
 import { fillArray } from 'utils/helper'
 import { animations } from './data'
 import './style.css'
@@ -185,14 +187,14 @@ function Sections() {
     <>
       <Box px={16}>
         <Sect1 />
-      </Box>
-      <Sect2 />
-      <Box px={16}>
+        <Sect2 />
         <Sect3 />
-      </Box>
-      <Box px={16}>
         <Sect4 />
+        <Sect5 />
+        <Sect6 />
       </Box>
+
+      <Box h={120} />
     </>
   )
 }

@@ -1,4 +1,8 @@
-import { Box, Group, Text, AspectRatio, ScrollArea } from '@mantine/core'
+import { useState, useEffect, useRef } from 'react'
+import { Box, Text, AspectRatio } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import { Carousel, Embla } from '@mantine/carousel'
+import Autoplay from 'embla-carousel-autoplay'
 
 type CellProps = {
   img: string
@@ -68,24 +72,35 @@ function Cell(props: CellProps) {
 }
 
 export default function Sect2() {
+  const matches = useMediaQuery('(min-width: 576px)')
+  const size = matches ? '40%' : '80%'
+  const autoplay = useRef(Autoplay({ delay: 6000 }))
+  const [embla, setEmbla] = useState<Embla | null>(null)
+
+  useEffect(() => {
+    if (embla) {
+      embla.reInit()
+    }
+  }, [embla, size])
+
   return (
-    <ScrollArea type="never">
-      <Box px={16}>
-        <Group spacing={16} align="flex-start" noWrap>
-          {data.map((el) => (
-            <Box
-              key={el.img}
-              sx={{
-                minWidth: 284,
-                maxWidth: 420,
-                width: '40vw',
-              }}
-            >
-              <Cell {...el} />
-            </Box>
-          ))}
-        </Group>
-      </Box>
-    </ScrollArea>
+    <Carousel
+      align="start"
+      slideSize={size}
+      slideGap="md"
+      withControls={false}
+      dragFree
+      loop
+      getEmblaApi={setEmbla}
+      plugins={[autoplay.current]}
+      onMouseEnter={autoplay.current.stop}
+      onMouseLeave={autoplay.current.reset}
+    >
+      {data.map((el, i) => (
+        <Carousel.Slide key={`sect2-${i}`}>
+          <Cell {...el} />
+        </Carousel.Slide>
+      ))}
+    </Carousel>
   )
 }

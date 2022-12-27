@@ -1,8 +1,8 @@
 import { Box, Group, Text, AspectRatio, Center } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import StyledButton from 'components/styled/StyledButton'
-import { ReactComponent as Svg0 } from '../../../public/images/sect4-0.svg'
-import { ReactComponent as Svg1 } from '../../../public/images/sect4-1.svg'
+import { ReactComponent as Svg0 } from 'assets/sect4-0.svg'
+import { ReactComponent as Svg1 } from 'assets/sect4-1.svg'
 
 type Anchor = {
   txt: string
@@ -38,7 +38,6 @@ const data: CellProps[] = [
 
 function Cell(props: CellProps) {
   const { img, content, links } = props
-  const matches = useMediaQuery('(min-width: 576px)')
   const matchesLarge = useMediaQuery('(min-width: 992px)')
   return (
     <>
@@ -51,13 +50,14 @@ function Cell(props: CellProps) {
           color: 'white',
         }}
       >
-        <Center px={48} py={24}>
+        <Center pl={48} pr={24} py={24} sx={{ gap: 32 }}>
           <Box
+            maw={220}
+            h="100%"
             sx={{
-              height: '100%',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: matchesLarge ? 'start' : 'center',
               justifyContent: 'center',
               gap: 24,
             }}
@@ -65,7 +65,11 @@ function Cell(props: CellProps) {
             <Text fz="xs" fw={400}>
               {content}
             </Text>
-            <Box sx={{ height: 120 }}>{img}</Box>
+            {matchesLarge ? (
+              <Box h={24} />
+            ) : (
+              <Box sx={{ height: 120 }}>{img}</Box>
+            )}
             <Group>
               {links.map((el) => (
                 <StyledButton key={el.txt} variant="outline" radius="xl">
@@ -74,6 +78,11 @@ function Cell(props: CellProps) {
               ))}
             </Group>
           </Box>
+          {matchesLarge ? (
+            <>
+              <Box h={212}>{img}</Box>
+            </>
+          ) : null}
         </Center>
       </AspectRatio>
     </>
