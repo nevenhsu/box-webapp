@@ -199,7 +199,7 @@ export default function CarouselPage(props: CarouselPageProps) {
         styles={{
           controls: {
             padding: 0,
-            height: '60%',
+            height: '80%',
             transform: 'translateY(-50%)',
           },
           control: {

@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect, useState } from 'react'
 import clsx from 'clsx'
 import { gsap } from 'gsap'
 import { Box, Center, CloseButton } from '@mantine/core'
+import { useScrollLock } from '@mantine/hooks'
 import CarouselPage from 'components/CarouselPage'
 import TopBar from './TopBar'
 import Cube from './Cube'
@@ -20,6 +21,7 @@ export default function Home() {
   const [load, setLoad] = useState(false) // line-image
   const [done, setDone] = useState(false) // animation is done
   const [slide, setSlide] = useState(1)
+  const [scrollLocked, setScrollLocked] = useScrollLock()
 
   useLayoutEffect(() => {
     // init
@@ -89,6 +91,10 @@ export default function Home() {
         gsap.to('.details', { opacity: 0, duration: 1 })
       }
     })
+
+    // lock
+    setScrollLocked(open)
+    document.documentElement.style.overflow = open ? 'hidden' : ''
   }, [open])
 
   const handleClickCube = (
@@ -209,9 +215,11 @@ export default function Home() {
             width: '100vw',
             height: '100vh',
             opacity: 0,
-            '& *': {
-              pointerEvents: (open ? '' : 'none !important') as any,
-            },
+            '& *': open
+              ? {}
+              : {
+                  pointerEvents: 'none !important' as any,
+                },
           }}
         >
           <>
