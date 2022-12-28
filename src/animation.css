@@ -1,0 +1,65 @@
+@keyframes breathing3 {
+  0% {
+    transform: translateY(0%);
+  }
+
+  25% {
+    transform: translateY(-3px);
+  }
+
+  60% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate__breathing3 {
+  animation-name: breathing3;
+}
+
+@keyframes breathing2 {
+  0% {
+    transform: translateY(0%);
+  }
+
+  25% {
+    transform: translateY(-2px);
+  }
+
+  60% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate__breathing2 {
+  animation-name: breathing2;
+}
+
+@keyframes breathing1 {
+  0% {
+    transform: translateY(0%);
+  }
+
+  25% {
+    transform: translateY(-1px);
+  }
+
+  60% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate__breathing1 {
+  animation-name: breathing1;
+}

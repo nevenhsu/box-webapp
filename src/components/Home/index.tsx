@@ -1,39 +1,38 @@
 import { useRef, useLayoutEffect, useState } from 'react'
+import clsx from 'clsx'
 import { gsap } from 'gsap'
-import { Box, Center, CloseButton, Modal, Text, Divider } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { Box, Center, CloseButton, Modal } from '@mantine/core'
 import CarouselPage from 'components/CarouselPage'
 import TopBar from './TopBar'
 import Cube from './Cube'
-import Sect1 from './Sect1'
-import Sect2 from './Sect2'
-import Sect3 from './Sect3'
-import Sect4 from './Sect4'
-import Sect5 from './Sect5'
-import Sect6 from './Sect6'
-import Sect7 from './Sect7'
-import Footer from './Footer'
+import Sections from 'components/Sections'
 import { fillArray } from 'utils/helper'
 import { animations } from './data'
-import type { BoxProps } from '@mantine/core'
 import './style.css'
 
 const dusts = fillArray(4)
 const cubes = fillArray(6)
 
 export default function Home() {
-  const root = useRef<HTMLImageElement>(null)
   const tlRef = useRef<gsap.core.Timeline>()
-  const [open, setOpen] = useState(false)
-  const [load, setLoad] = useState(false)
+  const initRef = useRef(false) // avoid initializing twice
+  const [open, setOpen] = useState(false) // carouselPage
+  const [load, setLoad] = useState(false) // line-image
+  const [done, setDone] = useState(false) // animation is done
 
   useLayoutEffect(() => {
-    // hide images
-    gsap.set('.line-img', { width: '0%' })
-    //  hide cube & dust
-    animations.forEach((el) => {
-      gsap.set(el.target, { opacity: 0 })
-    })
+    // init
+    if (!initRef.current) {
+      initRef.current = true
+      // hide images
+      gsap.set('.line-img', { width: '0%' })
+      // hide header
+      gsap.set('.topBar', { width: '0%', opacity: 0 })
+      //  hide cube & dust
+      animations.forEach((el) => {
+        gsap.set(el.target, { opacity: 0 })
+      })
+    }
   }, [])
 
   useLayoutEffect(() => {
@@ -43,22 +42,30 @@ export default function Home() {
     const ctx = gsap.context(() => {
       // init timeline
       const tl = gsap.timeline()
-      // line
+      // line-img & header
       tl.set('.line-img', { width: '0%' })
-      tl.to('.line-img', { width: '100%', duration: 2.5 })
+        .to('.line-img', {
+          width: '100%',
+          duration: 2.5,
+        })
+        .call(() => setDone(true))
+        .to('.topBar', { width: '100%', duration: 2 })
+        .to('.topBar-group', { opacity: 1, duration: 1 }, 4)
+
       // cube & dust
       animations.forEach((el) => {
         tl.set(el.target, { opacity: 0 }, 0)
         tl.to(el.target, { opacity: 1, duration: 0.75 }, el.sec)
       })
 
-      gsap.to('.cube', {
-        x: gsap.utils.random(-2, 2, 1, true),
-        y: gsap.utils.random(-2, 2, 1, true),
-        repeat: -1,
-        repeatRefresh: true,
-      })
-    }, root)
+      // // cube motion
+      // gsap.to('.cube', {
+      //   x: gsap.utils.random(-2, 2, 1, true),
+      //   y: gsap.utils.random(-2, 2, 1, true),
+      //   repeat: -1,
+      //   repeatRefresh: true,
+      // })
+    })
   }, [load])
 
   useLayoutEffect(() => {
@@ -78,7 +85,7 @@ export default function Home() {
       } else {
         tlRef.current.reverse()
       }
-    }, root)
+    })
   }, [open])
 
   const handleClickCube: React.MouseEventHandler<HTMLImageElement> = (
@@ -95,10 +102,17 @@ export default function Home() {
 
   return (
     <>
-      <TopBar />
+      <TopBar
+        boxProps={{
+          className: clsx('topBar', 'animate__animated', {
+            animate__fadeOut: open,
+            animate__fadeIn: !open && done,
+          }),
+        }}
+      />
 
       <Center
-        ref={root}
+        id="sect0"
         sx={{ position: 'relative', width: '100vw', height: '100vh' }}
       >
         {/* Background */}
@@ -119,18 +133,29 @@ export default function Home() {
         </div>
 
         {/* Gradient */}
-        <div className="absolute-center gradient" />
+        <div className="absolute-center gradient pointer-events-none" />
 
         {/* Dust */}
         {dusts.map((o, i) => {
           const name = `dust${i}`
           return (
-            <Cube
+            <span
               key={name}
-              name={name}
-              size={36}
               className={`p-absolute cube ${name}`}
-            />
+              style={{
+                width: 36,
+                height: 36,
+              }}
+            >
+              <span
+                className={`p-absolute animate__animated animate__infinite 
+                animate__breathing${i % 2 > 0 ? 1 : 2}
+                animate__${i % 2 > 0 ? 'slow' : 'slower'} 
+                animate__delay-${i % 5}s`}
+              >
+                <Cube className="cube-img" name={name} size={36} />
+              </span>
+            </span>
           )
         })}
 
@@ -146,12 +171,19 @@ export default function Home() {
                 height: 72,
               }}
             >
-              <Cube
-                className="cube-img"
-                onClick={handleClickCube}
-                name={name}
-                size={72}
-              />
+              <span
+                className={`p-absolute animate__animated animate__infinite 
+                animate__breathing${i % 2 > 0 ? 3 : 2}
+                animate__${i % 2 > 0 ? 'slow' : 'slower'} 
+                animate__delay-${i % 5}s`}
+              >
+                <Cube
+                  className="cube-img"
+                  onClick={handleClickCube}
+                  name={name}
+                  size={72}
+                />
+              </span>
             </span>
           )
         })}
@@ -195,65 +227,6 @@ export default function Home() {
       </Center>
 
       <Sections />
-    </>
-  )
-}
-
-type TitleProps = {
-  title: string
-  subtitle: string
-  boxProps?: BoxProps
-}
-function Title(props: TitleProps) {
-  const { title, subtitle, boxProps } = props
-  const matches = useMediaQuery('(min-width: 576px)')
-  return (
-    <Box mb={matches ? 80 : 64} {...boxProps}>
-      <Text fw={300} fz={matches ? 60 : 30}>
-        {title}
-      </Text>
-      <Text fw={300} fz={matches ? 40 : 16}>
-        {subtitle.toUpperCase()}
-      </Text>
-    </Box>
-  )
-}
-
-function Sections() {
-  const matches = useMediaQuery('(min-width: 576px)')
-  const m = matches ? 160 : 80
-  return (
-    <>
-      <Box px={matches ? 72 : 16}>
-        <Divider mb={m} />
-        <Sect1 />
-        <Divider my={m} />
-        <Title title="能力优势" subtitle="Advantages" />
-        <Sect2 />
-        <Divider my={m} />
-        <Title title="资讯" subtitle="News" />
-        <Sect3 />
-        <Divider my={m} />
-        <Title title="自由创作" subtitle="Free Creation" />
-        <Sect4 />
-        <Divider my={m} />
-        <Title title="合作伙伴" subtitle="Partnership" />
-        <Sect5 />
-        <Divider my={m} />
-        <Title title="联系方式" subtitle="Contact" />
-        <Sect6 />
-        <Divider my={m} />
-        <Title
-          title="合作邀请"
-          subtitle="Business Cooperation"
-          boxProps={{ mb: 24 }}
-        />
-        <Sect7 />
-        <Divider mt={m} />
-        <Footer />
-      </Box>
-
-      {/* <Box h={120} /> */}
     </>
   )
 }

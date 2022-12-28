@@ -89,12 +89,12 @@ export default function Sect2() {
       slideSize={size}
       slideGap="md"
       withControls={false}
-      dragFree
       loop
+      dragFree
       getEmblaApi={setEmbla}
       plugins={[autoplay.current]}
       onMouseEnter={autoplay.current.stop}
-      onMouseLeave={autoplay.current.reset}
+      onMouseLeave={() => autoplay.current.play()}
     >
       {data.map((el, i) => (
         <Carousel.Slide key={`sect2-${i}`}>

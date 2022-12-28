@@ -1,19 +1,22 @@
+import _ from 'lodash'
 import { Button, ButtonProps, createPolymorphicComponent } from '@mantine/core'
 import styled from '@emotion/styled'
 
 type StyledButtonProps = ButtonProps & {
   colorScheme?: 'dark' | 'light'
+  fw?: number | string
 }
 
 const _StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'colorScheme',
-})<StyledButtonProps>(({ colorScheme, theme }) => {
+})<StyledButtonProps>(({ colorScheme, theme, fw }) => {
   const scheme = colorScheme || theme.colorScheme
   const color = scheme === 'light' ? theme.black : theme.white
   return {
     color,
     borderColor: color,
-    fontWeight: 400,
+    fontWeight: fw || 400,
+    padding: '0 16px',
     '&:hover': {
       color: '#ddd',
       backgroundColor: 'transparent',

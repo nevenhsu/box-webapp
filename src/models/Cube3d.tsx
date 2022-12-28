@@ -20,7 +20,7 @@ export const Model = forwardRef<any>(
   (props: JSX.IntrinsicElements['group'], ref) => {
     const { nodes, materials } = useGLTF('/cube.glb') as unknown as GLTFResult
     return (
-      <group {...props} dispose={null}>
+      <group {...props} dispose={null} ref={ref}>
         <mesh
           geometry={nodes.Cube.geometry}
           material={materials.Material}

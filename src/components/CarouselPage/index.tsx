@@ -1,8 +1,10 @@
 import _ from 'lodash'
-import { useState, useLayoutEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { Box, Center } from '@mantine/core'
-import { Carousel } from '@mantine/carousel'
+import { Carousel, Embla } from '@mantine/carousel'
+import { useMediaQuery } from '@mantine/hooks'
+import { Globals } from '@react-spring/three'
 import Scene3d from 'components/Scene3d'
 // models
 import { Model as Cube3d } from 'models/Cube3d'
@@ -14,6 +16,10 @@ import { Model as Planet4 } from 'models/Planet4'
 import { Model as Planet5 } from 'models/Planet5'
 import type { SceneProps } from 'components/Scene3d'
 import './style.css'
+
+Globals.assign({
+  frameLoop: 'always',
+})
 
 type CarouselPageProps = {
   open: boolean
@@ -28,6 +34,7 @@ type DetailProps = Detail & {
   open: boolean
   show: boolean
   active: boolean
+  i: number // index
 }
 
 const initialSlide = 1
@@ -41,7 +48,7 @@ const slides: Detail[] = [
       z: 35,
       intensity: 2,
       fallback: <Fallback src="/render/planet0.png" />,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
     },
   },
   {
@@ -50,7 +57,7 @@ const slides: Detail[] = [
       z: 23.5,
       intensity: 2,
       fallback: <Fallback src="/render/planet1.png" />,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
     },
   },
   {
@@ -59,7 +66,7 @@ const slides: Detail[] = [
       z: 32,
       intensity: 0.5,
       fallback: <Fallback src="/render/planet2.png" style={{ padding: 32 }} />,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
     },
   },
   {
@@ -68,7 +75,7 @@ const slides: Detail[] = [
       z: 34,
       intensity: 1,
       fallback: <Fallback src="/render/planet3.png" />,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
     },
   },
   {
@@ -77,7 +84,7 @@ const slides: Detail[] = [
       z: 36,
       intensity: 2,
       fallback: <Fallback src="/render/planet4.png" style={{ padding: 8 }} />,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
     },
   },
   {
@@ -86,16 +93,18 @@ const slides: Detail[] = [
       z: 32,
       intensity: 4,
       fallback: <Fallback src="/render/planet5.png" />,
-      renderModel: (ref) => <Cube3d ref={ref} />,
+      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
     },
   },
 ]
 
 function Detail(props: DetailProps) {
-  const { sceneProps, open, show, active } = props
+  const { sceneProps, open, show, active, i } = props
 
   const root = useRef<HTMLImageElement>(null)
   const tlRef = useRef<gsap.core.Timeline>()
+  const matches = useMediaQuery('(min-width: 576px)')
+
   useLayoutEffect(() => {
     // loading
     const ctx = gsap.context(() => {
@@ -104,7 +113,7 @@ function Detail(props: DetailProps) {
         tlRef.current = gsap.timeline()
       }
       const tween: gsap.TweenVars = {
-        scale: show ? 1 : 0.95,
+        scale: show ? 1 : matches ? 0.6 : 0.95,
         duration: 0.75,
         delay: 1,
       }
@@ -113,7 +122,16 @@ function Detail(props: DetailProps) {
         tlRef.current.to('.fallback', tween, 0)
       }
     }, root)
-  }, [open, show])
+  }, [open, show, matches])
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.to('canvas', {
+        scale: show ? 1 : matches ? 0.6 : 0.95,
+        duration: 0.75,
+      })
+    }, root)
+  }, [show, matches])
 
   return (
     <Center
@@ -126,7 +144,12 @@ function Detail(props: DetailProps) {
         },
       }}
     >
-      <div>
+      <div
+        className={`p-absolute animate__animated animate__infinite 
+                animate__breathing${i % 2 > 0 ? 3 : 2}
+                animate__${i % 2 > 0 ? 'slow' : 'slower'} 
+                animate__delay-${i % 5}s`}
+      >
         {/* Ratio: 1 */}
         <Box
           sx={{
@@ -136,7 +159,7 @@ function Detail(props: DetailProps) {
           }}
         >
           <Box
-            className="absolute-center"
+            className="absolute-center c-grab"
             sx={{
               height: '100%',
             }}
@@ -160,6 +183,9 @@ export default function CarouselPage(props: CarouselPageProps) {
   const root = useRef<HTMLImageElement>(null)
   const tlRef = useRef<gsap.core.Timeline>()
   const [slide, setSlide] = useState(initialSlide)
+  const [embla, setEmbla] = useState<Embla | null>(null)
+  const matches = useMediaQuery('(min-width: 576px)')
+  const size = matches ? '40%' : '60%'
 
   useLayoutEffect(() => {
     // loading
@@ -180,6 +206,12 @@ export default function CarouselPage(props: CarouselPageProps) {
     }, root)
   }, [open])
 
+  useEffect(() => {
+    if (embla) {
+      embla.reInit()
+    }
+  }, [embla, size])
+
   return (
     <Box
       ref={root}
@@ -192,9 +224,10 @@ export default function CarouselPage(props: CarouselPageProps) {
       <Carousel
         initialSlide={initialSlide}
         slideGap="xs"
-        slideSize="60%"
+        slideSize={size}
         height="100vh"
         draggable={false}
+        getEmblaApi={setEmbla}
         onSlideChange={(index) => setSlide(index)}
         loop
         styles={{
@@ -204,7 +237,7 @@ export default function CarouselPage(props: CarouselPageProps) {
             transform: 'translateY(-50%)',
           },
           control: {
-            width: '10%',
+            width: matches ? '25%' : '10%',
             height: '100%',
             background: 'red',
             opacity: 0,
@@ -221,6 +254,7 @@ export default function CarouselPage(props: CarouselPageProps) {
               open={open}
               show={i === slide}
               active={isActive(i, slide)}
+              i={i}
             />
           </Carousel.Slide>
         ))}

@@ -64,12 +64,12 @@ export default function Sect5() {
         slideSize={size}
         slideGap={matches ? 'md' : 'xs'}
         withControls={false}
-        dragFree
         loop
+        dragFree
         getEmblaApi={setEmbla}
         plugins={[autoplay.current]}
         onMouseEnter={autoplay.current.stop}
-        onMouseLeave={autoplay.current.reset}
+        onMouseLeave={() => autoplay.current.play()}
       >
         {[...data, ...data].map((el, i) => (
           <Carousel.Slide key={`sect5-${i}`}>
