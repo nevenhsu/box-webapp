@@ -23,6 +23,7 @@ Globals.assign({
 
 type CarouselPageProps = {
   open: boolean
+  slide: number
 }
 
 type Detail = {
@@ -38,7 +39,6 @@ type DetailProps = Detail & {
   i: number // index
 }
 
-const initialSlide = 1
 const Fallback = (props: { src: string; style?: React.CSSProperties }) => (
   <img className="fallback" src={props.src} style={props.style} alt="" />
 )
@@ -101,37 +101,19 @@ const slides: Detail[] = [
 
 function Detail(props: DetailProps) {
   const { sceneProps, open, show, active, matches, i } = props
-
   const root = useRef<HTMLImageElement>(null)
-  const tlRef = useRef<gsap.core.Timeline>()
 
   useLayoutEffect(() => {
     // loading
     const ctx = gsap.context(() => {
-      // init timeline
-      if (!tlRef.current) {
-        tlRef.current = gsap.timeline()
-      }
       const tween: gsap.TweenVars = {
-        scale: show ? 1 : matches ? 0.6 : 0.95,
+        scale: open ? (show ? 1 : matches ? 0.6 : 0.95) : 0,
         duration: 0.75,
-        delay: 1,
       }
-      if (open) {
-        tlRef.current.to('canvas', tween, 0)
-        tlRef.current.to('.fallback', tween, 0)
-      }
+      gsap.to('canvas', tween)
+      gsap.to('.fallback', tween)
     }, root)
   }, [open, show, matches])
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to('canvas', {
-        scale: show ? 1 : matches ? 0.6 : 0.95,
-        duration: 0.75,
-      })
-    }, root)
-  }, [show, matches])
 
   return (
     <Center
@@ -164,7 +146,7 @@ function Detail(props: DetailProps) {
               height: '100%',
             }}
           >
-            <Scene3d {...sceneProps} visible={active} />
+            <Scene3d {...sceneProps} open={open} visible={active} />
           </Box>
         </Box>
         <Box
@@ -180,31 +162,10 @@ function Detail(props: DetailProps) {
 export default function CarouselPage(props: CarouselPageProps) {
   const { open } = props
 
-  const root = useRef<HTMLImageElement>(null)
-  const tlRef = useRef<gsap.core.Timeline>()
-  const [slide, setSlide] = useState(initialSlide)
+  const [slide, setSlide] = useState(props.slide)
   const [embla, setEmbla] = useState<Embla | null>(null)
   const matches = useMediaQuery('(min-width: 576px)')
   const size = matches ? '40%' : '60%'
-
-  useLayoutEffect(() => {
-    // loading
-    const ctx = gsap.context(() => {
-      // init timeline
-      if (!tlRef.current) {
-        const tween: gsap.TweenVars = { scale: 1, duration: 1 }
-        tlRef.current = gsap
-          .timeline()
-          .to('canvas', tween, 0)
-          .to('.fallback', tween, 0)
-      }
-      if (open) {
-        tlRef.current.play()
-      } else {
-        tlRef.current.reverse()
-      }
-    }, root)
-  }, [open])
 
   useEffect(() => {
     if (embla) {
@@ -212,9 +173,14 @@ export default function CarouselPage(props: CarouselPageProps) {
     }
   }, [embla, size])
 
+  useLayoutEffect(() => {
+    if (embla) {
+      embla.scrollTo(props.slide, true)
+    }
+  }, [embla, props.slide])
+
   return (
     <Box
-      ref={root}
       sx={{
         '& canvas': {
           transform: 'scale(0, 0)',
@@ -222,7 +188,7 @@ export default function CarouselPage(props: CarouselPageProps) {
       }}
     >
       <Carousel
-        initialSlide={initialSlide}
+        initialSlide={slide}
         slideGap="xs"
         slideSize={size}
         height="100vh"
@@ -233,7 +199,7 @@ export default function CarouselPage(props: CarouselPageProps) {
         styles={{
           controls: {
             padding: 0,
-            height: '40%',
+            height: '60%',
             transform: 'translateY(-50%)',
           },
           control: {

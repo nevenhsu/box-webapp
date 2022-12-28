@@ -148,7 +148,7 @@ export default function TopBar(props: TopBarProps) {
           sx={{
             position: 'fixed',
             right: 12,
-            top: 12,
+            top: 16,
             zIndex: 201,
           }}
         />

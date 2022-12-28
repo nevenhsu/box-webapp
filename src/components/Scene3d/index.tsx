@@ -6,11 +6,16 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { useSpring, animated } from '@react-spring/three'
 import type { Group } from 'three'
 
-type ModelProps = {
+type Model = {
   model: JSX.Element
 }
 
-export type SceneProps = ModelProps & {
+type ModelProps = {
+  model: JSX.Element
+  open: boolean
+}
+
+export type SceneProps = Model & {
   z: number
   intensity: number
   fallback?: JSX.Element
@@ -18,15 +23,15 @@ export type SceneProps = ModelProps & {
 
 type Scene3dProps = SceneProps & {
   visible: boolean
+  open: boolean
 }
 
 function Model(props: ModelProps) {
-  const { model } = props
+  const { model, open } = props
 
   const ref = useRef<Group>(null)
   const animProps = useSpring<any>({
-    from: { rotation: [0, -Math.PI / 1.75, 0] },
-    to: { rotation: [0, 0, 0] },
+    rotation: open ? [0, 0, 0] : [0, -Math.PI / 1.75, 0],
     config: {
       mass: 2,
       friction: 25,
@@ -51,7 +56,7 @@ function Model(props: ModelProps) {
 }
 
 export default function Scene3d(props: Scene3dProps) {
-  const { intensity, z, fallback, visible, model } = props
+  const { intensity, z, fallback, visible, model, open } = props
   return (
     <ErrorBoundary
       FallbackComponent={(error) => {
@@ -63,9 +68,9 @@ export default function Scene3d(props: Scene3dProps) {
         <Canvas className="canvas" camera={{ fov: 70, position: [0, 0, z] }}>
           <OrbitControls enableZoom={false} enablePan={false} />
           <group visible={visible}>
-            <Model model={model} />
+            <Model model={model} open={open} />
           </group>
-          <ambientLight intensity={intensity} visible={visible} />
+          <ambientLight intensity={intensity} />
           <EffectComposer>
             <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} />
           </EffectComposer>

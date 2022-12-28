@@ -1,12 +1,12 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import clsx from 'clsx'
 import { gsap } from 'gsap'
-import { Box, Center, CloseButton, Modal } from '@mantine/core'
+import { Box, Center, CloseButton } from '@mantine/core'
 import CarouselPage from 'components/CarouselPage'
 import TopBar from './TopBar'
 import Cube from './Cube'
 import Sections from 'components/Sections'
-import { fillArray } from 'utils/helper'
+import { fillArray, scrollIntoView } from 'utils/helper'
 import { animations } from './data'
 import './style.css'
 
@@ -19,6 +19,7 @@ export default function Home() {
   const [open, setOpen] = useState(false) // carouselPage
   const [load, setLoad] = useState(false) // line-image
   const [done, setDone] = useState(false) // animation is done
+  const [slide, setSlide] = useState(1)
 
   useLayoutEffect(() => {
     // init
@@ -69,7 +70,7 @@ export default function Home() {
   }, [load])
 
   useLayoutEffect(() => {
-    // transition
+    // background
     const ctx = gsap.context(() => {
       if (!tlRef.current) {
         const delay = 0.5
@@ -82,22 +83,28 @@ export default function Home() {
       }
       if (open) {
         tlRef.current.play()
+        gsap.to('.details', { opacity: 1, duration: 0.75 })
       } else {
         tlRef.current.reverse()
+        gsap.to('.details', { opacity: 0, duration: 1 })
       }
     })
   }, [open])
 
-  const handleClickCube: React.MouseEventHandler<HTMLImageElement> = (
-    event
+  const handleClickCube = (
+    event: React.MouseEvent<HTMLImageElement, MouseEvent>,
+    index: number
   ) => {
     setOpen(true)
+    setSlide(index)
+    scrollIntoView('sect0')
+
     gsap.set('.circle', {
       x: event.clientX,
       y: event.clientY,
     })
     gsap.to('.circle', { opacity: 1, duration: 0.75 })
-    gsap.to('.circle', { opacity: 0, duration: 0.75, delay: 0.75 })
+    gsap.to('.circle', { opacity: 0, duration: 0.5, delay: 0.5 })
   }
 
   return (
@@ -179,7 +186,7 @@ export default function Home() {
               >
                 <Cube
                   className="cube-img"
-                  onClick={handleClickCube}
+                  onClick={(event) => handleClickCube(event, i)}
                   name={name}
                   size={72}
                 />
@@ -194,28 +201,27 @@ export default function Home() {
         </div>
 
         {/* Details */}
-        <Modal
-          opened={open}
-          onClose={() => setOpen(false)}
-          fullScreen
-          transitionDuration={750}
-          exitTransitionDuration={1000}
-          withCloseButton={false}
-          styles={{
-            modal: {
-              background: 'transparent',
-              padding: '0 !important',
+        <Box
+          className={clsx('details', { 'pointer-events-none': !open })}
+          sx={{
+            position: 'fixed',
+            zIndex: 100,
+            width: '100vw',
+            height: '100vh',
+            opacity: 0,
+            '& *': {
+              pointerEvents: (open ? '' : 'none !important') as any,
             },
           }}
         >
           <>
-            <CarouselPage open={open} />
+            <CarouselPage open={open} slide={slide} />
             <Box
               sx={{
                 position: 'fixed',
                 zIndex: 1,
-                top: 20,
-                left: 24,
+                top: 16,
+                left: 16,
                 border: '1px solid white',
                 borderRadius: 99,
               }}
@@ -223,7 +229,7 @@ export default function Home() {
               <CloseButton onClick={() => setOpen(false)} />
             </Box>
           </>
-        </Modal>
+        </Box>
       </Center>
 
       <Sections />
