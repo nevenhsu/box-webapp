@@ -1,16 +1,13 @@
-import { Suspense, useRef, useLayoutEffect } from 'react'
+import { Suspense, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import { useSpring, animated, to } from '@react-spring/three'
+import { useSpring, animated } from '@react-spring/three'
 import type { Group } from 'three'
 
 type ModelProps = {
-  renderModel: (
-    ref: React.RefObject<Group>,
-    props?: JSX.IntrinsicElements['group']
-  ) => JSX.Element
+  model: JSX.Element
 }
 
 export type SceneProps = ModelProps & {
@@ -24,45 +21,37 @@ type Scene3dProps = SceneProps & {
 }
 
 function Model(props: ModelProps) {
-  const { renderModel } = props
+  const { model } = props
 
   const ref = useRef<Group>(null)
-  const { rotation } = useSpring({
-    from: { rotation: -Math.PI / 1.75 },
-    to: { rotation: 0 },
+  const animProps = useSpring<any>({
+    from: { rotation: [0, -Math.PI / 1.75, 0] },
+    to: { rotation: [0, 0, 0] },
     config: {
-      // mass: 5,
-      // friction: 1000,
-      // tension: 200,
+      mass: 2,
+      friction: 25,
+      tension: 100,
     },
   })
-
-  useLayoutEffect(() => {
-    // init
-    if (ref.current) {
-      ref.current.rotation.y = 0
-    }
-  }, [])
 
   useFrame((state, delta) => {
     // spin
     if (ref.current) {
-      // ref.current.rotation.y += delta / 4
+      ref.current.rotation.y += delta / 8
     }
   })
 
   return (
     <>
-      {/* @ts-ignore */}
-      <animated.group rotation={to(rotation, (value) => [0, value, 0])}>
-        {renderModel(ref)}
+      <animated.group ref={ref} {...animProps}>
+        {model}
       </animated.group>
     </>
   )
 }
 
 export default function Scene3d(props: Scene3dProps) {
-  const { intensity, z, fallback, visible, renderModel } = props
+  const { intensity, z, fallback, visible, model } = props
   return (
     <ErrorBoundary
       FallbackComponent={(error) => {
@@ -74,7 +63,7 @@ export default function Scene3d(props: Scene3dProps) {
         <Canvas className="canvas" camera={{ fov: 70, position: [0, 0, z] }}>
           <OrbitControls enableZoom={false} enablePan={false} />
           <group visible={visible}>
-            <Model renderModel={renderModel} />
+            <Model model={model} />
           </group>
           <ambientLight intensity={intensity} visible={visible} />
           <EffectComposer>

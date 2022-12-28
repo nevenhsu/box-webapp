@@ -34,6 +34,7 @@ type DetailProps = Detail & {
   open: boolean
   show: boolean
   active: boolean
+  matches: boolean
   i: number // index
 }
 
@@ -48,7 +49,7 @@ const slides: Detail[] = [
       z: 35,
       intensity: 2,
       fallback: <Fallback src="/render/planet0.png" />,
-      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
+      model: <Cube3d />,
     },
   },
   {
@@ -57,7 +58,7 @@ const slides: Detail[] = [
       z: 23.5,
       intensity: 2,
       fallback: <Fallback src="/render/planet1.png" />,
-      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
+      model: <Cube3d />,
     },
   },
   {
@@ -66,7 +67,7 @@ const slides: Detail[] = [
       z: 32,
       intensity: 0.5,
       fallback: <Fallback src="/render/planet2.png" style={{ padding: 32 }} />,
-      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
+      model: <Cube3d />,
     },
   },
   {
@@ -75,7 +76,7 @@ const slides: Detail[] = [
       z: 34,
       intensity: 1,
       fallback: <Fallback src="/render/planet3.png" />,
-      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
+      model: <Cube3d />,
     },
   },
   {
@@ -84,7 +85,7 @@ const slides: Detail[] = [
       z: 36,
       intensity: 2,
       fallback: <Fallback src="/render/planet4.png" style={{ padding: 8 }} />,
-      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
+      model: <Cube3d />,
     },
   },
   {
@@ -93,17 +94,16 @@ const slides: Detail[] = [
       z: 32,
       intensity: 4,
       fallback: <Fallback src="/render/planet5.png" />,
-      renderModel: (ref, props) => <Cube3d ref={ref} {...props} />,
+      model: <Cube3d />,
     },
   },
 ]
 
 function Detail(props: DetailProps) {
-  const { sceneProps, open, show, active, i } = props
+  const { sceneProps, open, show, active, matches, i } = props
 
   const root = useRef<HTMLImageElement>(null)
   const tlRef = useRef<gsap.core.Timeline>()
-  const matches = useMediaQuery('(min-width: 576px)')
 
   useLayoutEffect(() => {
     // loading
@@ -254,6 +254,7 @@ export default function CarouselPage(props: CarouselPageProps) {
               open={open}
               show={i === slide}
               active={isActive(i, slide)}
+              matches={matches}
               i={i}
             />
           </Carousel.Slide>
