@@ -1,22 +1,26 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import clsx from 'clsx'
 import { gsap } from 'gsap'
-import { Box, Center, CloseButton } from '@mantine/core'
-import { useScrollLock } from '@mantine/hooks'
+import { Box, Center, CloseButton, Text } from '@mantine/core'
+import { useScrollLock, useHover, useMediaQuery } from '@mantine/hooks'
 import CarouselPage from 'components/CarouselPage'
 import TopBar from './TopBar'
 import Cube from './Cube'
 import Sections from 'components/Sections'
+import StyledButton from 'components/styled/StyledButton'
 import { fillArray, scrollIntoView } from 'utils/helper'
-import { animations } from './data'
+import { IoAddSharp } from 'react-icons/io5'
+import { animations, cubes } from './data'
+import type { TCube } from './data'
 import './style.css'
 
 const dusts = fillArray(4)
-const cubes = fillArray(6)
 
 export default function Home() {
   const tlRef = useRef<gsap.core.Timeline>()
   const initRef = useRef(false) // avoid initializing twice
+  const matches = useMediaQuery('(min-width: 576px)')
+
   const [open, setOpen] = useState(false) // carouselPage
   const [load, setLoad] = useState(false) // line-image
   const [done, setDone] = useState(false) // animation is done
@@ -78,7 +82,11 @@ export default function Home() {
         const delay = 0.5
         tlRef.current = gsap
           .timeline()
-          .to('.line-div', { width: '240vw', duration: 1.5 }, delay)
+          .to(
+            '.line-div',
+            { width: '240vw', duration: 1.5, ease: 'power2.out' },
+            delay
+          )
           .to('.line-img', { top: '50vw', duration: 1.5 }, delay)
           .to('.gradient', { opacity: 1, duration: 0.75 }, delay)
           .to('.cube', { opacity: 0, duration: 0.75 }, delay)
@@ -116,11 +124,28 @@ export default function Home() {
   return (
     <>
       <TopBar
+        backdropProps={{
+          className: clsx('backdrop', 'animate__animated', {
+            animate__fadeOut: open,
+            animate__fadeIn: !open,
+          }),
+        }}
         boxProps={{
           className: clsx('topBar', 'animate__animated', {
             animate__fadeOut: open,
             animate__fadeIn: !open && done,
           }),
+        }}
+        burgerProps={{
+          className: clsx('animate__animated', {
+            animate__fadeOut: open || matches,
+            animate__fadeIn: !matches && !open && done,
+          }),
+          sx: {
+            opacity: 0,
+            animationDelay: done ? '0' : '5s',
+            pointerEvents: open ? 'none' : 'auto',
+          },
         }}
       />
 
@@ -173,33 +198,15 @@ export default function Home() {
         })}
 
         {/* Cubes */}
-        {cubes.map((o, i) => {
-          const name = `cube${i}`
-          return (
-            <span
-              key={name}
-              className={`p-absolute cube ${name} c-pointer`}
-              style={{
-                width: 72,
-                height: 72,
-              }}
-            >
-              <span
-                className={`p-absolute animate__animated animate__infinite 
-                animate__breathing${i % 2 > 0 ? 3 : 2}
-                animate__${i % 2 > 0 ? 'slow' : 'slower'} 
-                animate__delay-${i % 5}s`}
-              >
-                <Cube
-                  className="cube-img"
-                  onClick={(event) => handleClickCube(event, i)}
-                  name={name}
-                  size={72}
-                />
-              </span>
-            </span>
-          )
-        })}
+        {cubes.map((o, i) => (
+          <CubeItem
+            {...o}
+            key={o.name}
+            index={i}
+            matches={matches}
+            onClick={(event) => handleClickCube(event, i)}
+          />
+        ))}
 
         {/* Circle */}
         <div className="circle pointer-events-none">
@@ -225,6 +232,10 @@ export default function Home() {
           <>
             <CarouselPage open={open} slide={slide} />
             <Box
+              className={clsx('animate__animated', {
+                animate__fadeOut: !open,
+                animate__fadeIn: open,
+              })}
               sx={{
                 position: 'fixed',
                 zIndex: 1,
@@ -232,6 +243,7 @@ export default function Home() {
                 left: 16,
                 border: '1px solid white',
                 borderRadius: 99,
+                animationDelay: '750ms',
               }}
             >
               <CloseButton onClick={() => setOpen(false)} />
@@ -242,5 +254,64 @@ export default function Home() {
 
       <Sections />
     </>
+  )
+}
+
+type CubeItemProps = TCube & {
+  index: number
+  matches: boolean
+  onClick: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void
+}
+function CubeItem(props: CubeItemProps) {
+  const { name, title, index, matches, onClick } = props
+  const { hovered, ref } = useHover()
+  const showTxt = matches && hovered
+
+  return (
+    <span
+      ref={ref}
+      className={`p-absolute cube ${name} c-pointer`}
+      style={{
+        width: 72,
+        height: 72,
+      }}
+    >
+      <span
+        className={`p-absolute animate__animated animate__infinite 
+      animate__breathing${index % 2 > 0 ? 3 : 2}
+      animate__${index % 2 > 0 ? 'slow' : 'slower'} 
+      animate__delay-${index % 5}s`}
+      >
+        <Cube className="cube-img" onClick={onClick} name={name} size={72} />
+        {matches ? null : (
+          <Text
+            className="absolute-horizontal"
+            fz={10}
+            fw={500}
+            bottom={2}
+            sx={{ whiteSpace: 'nowrap' }}
+          >
+            {title}
+          </Text>
+        )}
+        <StyledButton
+          className={clsx('animate__animated animate__faster', {
+            animate__fadeIn: showTxt,
+            animate__fadeOut: !showTxt,
+          })}
+          variant="outline"
+          radius="xl"
+          rightIcon={<IoAddSharp />}
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%) !important',
+            top: -32,
+          }}
+        >
+          {title}
+        </StyledButton>
+      </span>
+    </span>
   )
 }

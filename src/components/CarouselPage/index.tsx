@@ -1,20 +1,16 @@
 import _ from 'lodash'
+import clsx from 'clsx'
 import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
-import { Box, Center } from '@mantine/core'
+import { Box, Center, Text, ScrollArea } from '@mantine/core'
 import { Carousel, Embla } from '@mantine/carousel'
 import { useMediaQuery } from '@mantine/hooks'
 import { Globals } from '@react-spring/three'
+import { useSpring, animated } from '@react-spring/web'
 import Scene3d from 'components/Scene3d'
-// models
-import { Model as Cube3d } from 'models/Cube3d'
-import { Model as Planet0 } from 'models/Planet0'
-import { Model as Planet1 } from 'models/Planet1'
-import { Model as Planet2 } from 'models/Planet2'
-import { Model as Planet3 } from 'models/Planet3'
-import { Model as Planet4 } from 'models/Planet4'
-import { Model as Planet5 } from 'models/Planet5'
-import type { SceneProps } from 'components/Scene3d'
+import StyledButton from 'components/styled/StyledButton'
+import { slides } from './data'
+import type { TDetail } from './data'
 import './style.css'
 
 Globals.assign({
@@ -26,12 +22,7 @@ type CarouselPageProps = {
   slide: number
 }
 
-type Detail = {
-  key: string
-  sceneProps: SceneProps
-}
-
-type DetailProps = Detail & {
+type DetailProps = TDetail & {
   open: boolean
   show: boolean
   active: boolean
@@ -39,69 +30,19 @@ type DetailProps = Detail & {
   i: number // index
 }
 
-const Fallback = (props: { src: string; style?: React.CSSProperties }) => (
-  <img className="fallback" src={props.src} style={props.style} alt="" />
-)
-const slides: Detail[] = [
-  {
-    key: 'planet0',
-    sceneProps: {
-      z: 35,
-      intensity: 2,
-      fallback: <Fallback src="/render/planet0.png" />,
-      model: <Cube3d />,
-    },
-  },
-  {
-    key: 'planet1',
-    sceneProps: {
-      z: 23.5,
-      intensity: 2,
-      fallback: <Fallback src="/render/planet1.png" />,
-      model: <Cube3d />,
-    },
-  },
-  {
-    key: 'planet2',
-    sceneProps: {
-      z: 32,
-      intensity: 0.5,
-      fallback: <Fallback src="/render/planet2.png" style={{ padding: 32 }} />,
-      model: <Cube3d />,
-    },
-  },
-  {
-    key: 'planet3',
-    sceneProps: {
-      z: 34,
-      intensity: 1,
-      fallback: <Fallback src="/render/planet3.png" />,
-      model: <Cube3d />,
-    },
-  },
-  {
-    key: 'planet4',
-    sceneProps: {
-      z: 36,
-      intensity: 2,
-      fallback: <Fallback src="/render/planet4.png" style={{ padding: 8 }} />,
-      model: <Cube3d />,
-    },
-  },
-  {
-    key: 'planet5',
-    sceneProps: {
-      z: 32,
-      intensity: 4,
-      fallback: <Fallback src="/render/planet5.png" />,
-      model: <Cube3d />,
-    },
-  },
-]
-
 function Detail(props: DetailProps) {
-  const { sceneProps, open, show, active, matches, i } = props
+  const { name, content, sceneProps, open, show, active, matches, i } = props
   const root = useRef<HTMLImageElement>(null)
+  const showTip = active && open && !show
+  const showTxt = show && open
+  const animClsx = getAnimationClsx(showTxt)
+
+  const springs = useSpring({
+    height: showTxt ? 220 : 0,
+    config: {
+      friction: 50,
+    },
+  })
 
   useLayoutEffect(() => {
     // loading
@@ -119,42 +60,87 @@ function Detail(props: DetailProps) {
     <Center
       ref={root}
       sx={{
+        flexDirection: 'column',
         height: '100%',
         width: '100%',
+        gap: 16,
         '& div': {
           width: '100%',
         },
       }}
     >
-      <div
-        className={`p-absolute animate__animated animate__infinite 
+      <Box
+        ta="center"
+        className={`p-relative animate__animated animate__infinite 
                 animate__breathing${i % 2 > 0 ? 3 : 2}
                 animate__${i % 2 > 0 ? 'slow' : 'slower'} 
                 animate__delay-${i % 5}s`}
       >
-        {/* Ratio: 1 */}
-        <Box
-          sx={{
-            position: 'relative',
-            paddingTop: '100%',
-            height: 0,
-          }}
-        >
-          <Box
-            className="absolute-center c-grab"
+        {/* Tip */}
+        {matches && showTip ? (
+          <StyledButton
+            className={getAnimationClsx(showTip)}
+            variant="outline"
+            radius="xl"
             sx={{
-              height: '100%',
+              position: 'relative',
+              top: 64,
+              animationDelay: showTip ? '500ms' : '',
             }}
           >
-            <Scene3d {...sceneProps} open={open} visible={active} />
+            {name}
+          </StyledButton>
+        ) : null}
+
+        {/* Ratio: 1 */}
+        <Box maw="50vh" mx="auto">
+          <Box
+            sx={{
+              position: 'relative',
+              paddingTop: '100%',
+              height: 0,
+            }}
+          >
+            <Box
+              className="absolute-center c-grab"
+              sx={{
+                height: '100%',
+              }}
+            >
+              <Scene3d {...sceneProps} open={open} visible={active} />
+            </Box>
           </Box>
         </Box>
-        <Box
-          sx={{
-            height: '25vh',
-          }}
-        />
-      </div>
+      </Box>
+      {/* Text */}
+      <animated.div style={{ ...springs, overflow: 'hidden' }}>
+        <Box maw={400} ta="center" mx="auto">
+          <Text
+            className={animClsx}
+            fz={24}
+            mb={16}
+            sx={{ animationDelay: showTxt ? '250ms' : '' }}
+          >
+            {name}
+          </Text>
+          <ScrollArea
+            className={animClsx}
+            h={88}
+            mb={32}
+            sx={{ animationDelay: showTxt ? '500ms' : '' }}
+          >
+            <Text fz="sm">{content}</Text>
+          </ScrollArea>
+          <StyledButton
+            className={animClsx}
+            variant="outline"
+            radius="xl"
+            sx={{ animationDelay: showTxt ? '750ms' : '' }}
+          >
+            进入星球
+          </StyledButton>
+        </Box>
+      </animated.div>
     </Center>
   )
 }
@@ -236,4 +222,11 @@ function isActive(index: number, curr: number) {
   const prev = curr - 1
   const next = curr + 1
   return _.includes([prev, curr, next], index) || prev < 0 || next >= total
+}
+
+function getAnimationClsx(show: boolean) {
+  return clsx('animate__animated', `animate__${show ? 'slow' : 'fast'}`, {
+    animate__fadeIn: show,
+    animate__fadeOut: !show,
+  })
 }

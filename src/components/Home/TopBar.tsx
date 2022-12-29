@@ -4,11 +4,13 @@ import { useMantineTheme } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import StyledButton from 'components/styled/StyledButton'
 import { scrollIntoView } from 'utils/helper'
-import type { BoxProps, HeaderProps } from '@mantine/core'
+import type { BoxProps, HeaderProps, BurgerProps } from '@mantine/core'
 
 type TopBarProps = {
+  backdropProps?: BoxProps
   boxProps?: BoxProps
   headerProps?: HeaderProps
+  burgerProps?: Omit<BurgerProps, 'opened'>
 }
 
 type Anchor = {
@@ -40,7 +42,7 @@ const links: Anchor[] = [
 ]
 
 export default function TopBar(props: TopBarProps) {
-  const { boxProps, headerProps } = props
+  const { backdropProps, boxProps, headerProps, burgerProps } = props
   const [opened, setOpened] = useState(false)
   const theme = useMantineTheme()
   const matches = useMediaQuery('(min-width: 576px)')
@@ -58,51 +60,66 @@ export default function TopBar(props: TopBarProps) {
   }, [opened, matches])
 
   return (
-    <Box
-      {...boxProps}
-      sx={{
-        position: 'fixed',
-        zIndex: 100,
-        overflow: 'hidden',
-        ...boxProps?.sx,
-      }}
-    >
-      <Header
-        height={56}
-        p="md"
-        bg="transparent"
-        display="flex"
-        {...headerProps}
+    <>
+      <Box
+        {...backdropProps}
         sx={{
+          position: 'fixed',
+          zIndex: 50,
           width: '100vw',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backdropFilter: 'saturate(180%) blur(20px)',
-          ...headerProps?.sx,
+          height: 56,
+          ...backdropProps?.sx,
         }}
+      />
+      <Box
+        {...boxProps}
+        sx={(theme) =>
+          ({
+            position: 'fixed',
+            zIndex: 100,
+            overflow: 'hidden',
+            borderBottom: `1px solid ${theme.colors.dark[5]}`,
+            ...boxProps?.sx,
+          } as any)
+        }
       >
-        <Box className="c-pointer" onClick={() => handleClick('sect0')}>
-          <img src="/images/logo.svg" height={12} />
-        </Box>
+        <Header
+          height={56}
+          p="md"
+          bg="transparent"
+          display="flex"
+          {...headerProps}
+          sx={{
+            width: '100vw',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: 'none',
+            ...headerProps?.sx,
+          }}
+        >
+          <Box className="c-pointer" onClick={() => handleClick('sect0')}>
+            <img src="/images/logo.svg" height={12} />
+          </Box>
 
-        {matches ? (
-          <Group className="topBar-group" spacing={0} opacity={0}>
-            {links.map((el, i) => (
-              <StyledButton
-                key={`nav-${i}`}
-                variant="subtle"
-                sx={{
-                  fontWeight: 300,
-                  border: 'none',
-                }}
-                onClick={() => handleClick(el.link)}
-              >
-                {el.txt}
-              </StyledButton>
-            ))}
-          </Group>
-        ) : null}
-      </Header>
+          {matches ? (
+            <Group className="topBar-group" spacing={0} opacity={0}>
+              {links.map((el, i) => (
+                <StyledButton
+                  key={`nav-${i}`}
+                  variant="subtle"
+                  sx={{
+                    fontWeight: 300,
+                    border: 'none',
+                  }}
+                  onClick={() => handleClick(el.link)}
+                >
+                  {el.txt}
+                </StyledButton>
+              ))}
+            </Group>
+          ) : null}
+        </Header>
+      </Box>
       <Drawer
         opened={opened}
         onClose={() => setOpened(false)}
@@ -138,21 +155,22 @@ export default function TopBar(props: TopBarProps) {
       </Drawer>
       {matches ? null : (
         <Burger
-          className="animate__animated animate__fadeIn animate__delay-1s"
           opened={opened}
           onClick={() => setOpened((o) => !o)}
           size={16}
           w={24}
           h={24}
           p={4}
+          {...burgerProps}
           sx={{
             position: 'fixed',
             right: 12,
             top: 16,
             zIndex: 201,
+            ...burgerProps?.sx,
           }}
         />
       )}
-    </Box>
+    </>
   )
 }

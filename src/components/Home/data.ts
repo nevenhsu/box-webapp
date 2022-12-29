@@ -3,6 +3,11 @@ type AnimationData = {
   sec: number
 }
 
+export type TCube = {
+  name: string
+  title: string
+}
+
 const animations: AnimationData[] = [
   {
     target: '.dust0',
@@ -46,4 +51,13 @@ const animations: AnimationData[] = [
   },
 ]
 
-export { animations }
+const cubes: TCube[] = [
+  { name: 'cube0', title: '区块乐园星球' },
+  { name: 'cube1', title: 'BOX元宇宙' },
+  { name: 'cube2', title: '智明佛学元宇宙' },
+  { name: 'cube3', title: '文旅星球' },
+  { name: 'cube4', title: 'UGC星球' },
+  { name: 'cube5', title: '氛途星球' },
+]
+
+export { animations, cubes }
