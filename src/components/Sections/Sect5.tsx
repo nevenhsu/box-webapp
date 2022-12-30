@@ -3,28 +3,16 @@ import { Image } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { Carousel, Embla } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
+import { fillArray } from 'utils/helper'
 
 type CellProps = {
   img: string
 }
 
-const data: CellProps[] = [
-  {
-    img: '/images/sect5-0.png',
-  },
-  {
-    img: '/images/sect5-1.png',
-  },
-  {
-    img: '/images/sect5-2.png',
-  },
-  {
-    img: '/images/sect5-3.png',
-  },
-  {
-    img: '/images/sect5-4.png',
-  },
-]
+const data: CellProps[] = fillArray(11).map((o, i) => ({
+  img: `/images/sect5-${i}.png`,
+}))
+const slides = [...data, ...data]
 
 function Cell(props: CellProps) {
   const { img } = props
@@ -68,10 +56,12 @@ export default function Sect5() {
         dragFree
         getEmblaApi={setEmbla}
         plugins={[autoplay.current]}
-        onMouseEnter={autoplay.current.stop}
-        onMouseLeave={() => autoplay.current.play()}
+        onMouseDown={autoplay.current.stop}
+        onMouseUp={() => autoplay.current.play()}
+        onTouchStart={autoplay.current.stop}
+        onTouchEnd={() => autoplay.current.play()}
       >
-        {[...data, ...data].map((el, i) => (
+        {slides.map((el, i) => (
           <Carousel.Slide key={`sect5-${i}`}>
             <Cell {...el} />
           </Carousel.Slide>

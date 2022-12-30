@@ -1,5 +1,5 @@
 import { Box, Group, Text, AspectRatio, Center } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { useHover, useMediaQuery } from '@mantine/hooks'
 import StyledButton from 'components/styled/StyledButton'
 import { ReactComponent as Svg0 } from 'assets/sect4-0.svg'
 import { ReactComponent as Svg1 } from 'assets/sect4-1.svg'
@@ -21,33 +21,40 @@ const data: CellProps[] = [
     key: '0',
     img: <Svg0 width="100%" height="100%" />,
     content:
-      '学习使用Box3引擎，你可以使用我们独家研发的模型编辑器和场景编辑器，创建属于你自己的元宇宙空间。将自己的想法的商业场景创造出来，让其更加有趣和炫酷。',
+      '学习使用BOX3引擎，你可以使用我们独家研发的模型编辑器和场景编辑器，创建属于你自己的元宇宙空间。将自己的想法和场景创造出来，让其更加有趣和炫酷，并达到自己的商业目标。',
     links: [
-      { txt: '学习使用', link: '' },
-      { txt: '开始创作', link: '' },
+      { txt: '学习使用', link: 'https://docs.box3.fun/' },
+      { txt: '开始创作', link: 'https://docs.box3.fun/' },
     ],
   },
   {
     key: '1',
     img: <Svg1 width="100%" height="100%" />,
     content:
-      '神奇代码岛作为box3引擎的创作者社区，每个月都有上百万的用户在其中活跃，快来加入社区，共同创作有趣有料的新项目。',
-    links: [{ txt: '访问社区', link: '' }],
+      '神奇代码岛，BOX3引擎的创作者社区，这里聚集了超过50万的创作者，每个月都有上百万的用户在其中活跃，快来加入社区，共同创作、交流有趣有料的项目。',
+    links: [
+      { txt: '访问社区', link: 'https://box3.codemao.cn/?filter=common' },
+    ],
   },
 ]
 
 function Cell(props: CellProps) {
   const { img, content, links } = props
   const matchesLarge = useMediaQuery('(min-width: 992px)')
+  const { hovered, ref } = useHover()
+  const color = hovered ? 'black' : 'white'
   return (
     <>
       <AspectRatio
+        ref={ref}
         ratio={matchesLarge ? 640 / 440 : 1}
         sx={{
           overflow: 'hidden',
-          border: '1px solid white',
+          border: `1px solid white`,
           borderRadius: 30,
-          color: 'white',
+          color,
+          background: hovered ? 'white' : 'transparent',
+          transition: 'all 500ms',
         }}
       >
         <Center pl={48} pr={24} py={24} sx={{ gap: 32 }}>
@@ -72,7 +79,14 @@ function Cell(props: CellProps) {
             )}
             <Group>
               {links.map((el) => (
-                <StyledButton key={el.txt} variant="outline" radius="xl">
+                <StyledButton
+                  component="a"
+                  href={el.link}
+                  key={el.txt}
+                  variant="outline"
+                  radius="xl"
+                  colorScheme={hovered ? 'light' : 'dark'}
+                >
                   {el.txt}
                 </StyledButton>
               ))}

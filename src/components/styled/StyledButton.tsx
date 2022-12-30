@@ -11,14 +11,16 @@ const _StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'colorScheme',
 })<StyledButtonProps>(({ colorScheme, theme, fw }) => {
   const scheme = colorScheme || theme.colorScheme
-  const color = scheme === 'light' ? theme.black : theme.white
+  const isLight = scheme === 'light'
+  const color = isLight ? theme.black : theme.white
+  const color2 = isLight ? '#555' : '#ddd'
   return {
     color,
     borderColor: color,
     fontWeight: fw || 400,
     padding: '0 16px',
     '&:hover': {
-      color: '#ddd',
+      color: color2,
       backgroundColor: 'transparent',
     },
     '&:active': {

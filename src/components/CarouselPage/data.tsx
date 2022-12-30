@@ -29,10 +29,10 @@ const slides: TDetail[] = [
     content: tempCont,
     link: '',
     sceneProps: {
-      z: 35,
+      z: 26,
       intensity: 2,
       fallback: <Fallback src="/render/planet0.png" />,
-      model: <Cube3d />,
+      model: <Planet0 />,
     },
   },
   {
@@ -41,10 +41,10 @@ const slides: TDetail[] = [
     content: tempCont,
     link: '',
     sceneProps: {
-      z: 23.5,
+      z: 22.5,
       intensity: 2,
       fallback: <Fallback src="/render/planet1.png" />,
-      model: <Cube3d />,
+      model: <Planet1 />,
     },
   },
   {
@@ -53,10 +53,10 @@ const slides: TDetail[] = [
     content: tempCont,
     link: '',
     sceneProps: {
-      z: 32,
+      z: 28,
       intensity: 0.5,
       fallback: <Fallback src="/render/planet2.png" style={{ padding: 32 }} />,
-      model: <Cube3d />,
+      model: <Planet2 />,
     },
   },
   {
@@ -65,10 +65,10 @@ const slides: TDetail[] = [
     content: tempCont,
     link: '',
     sceneProps: {
-      z: 34,
+      z: 28,
       intensity: 1,
       fallback: <Fallback src="/render/planet3.png" />,
-      model: <Cube3d />,
+      model: <Planet3 />,
     },
   },
   {
@@ -77,10 +77,10 @@ const slides: TDetail[] = [
     content: tempCont,
     link: '',
     sceneProps: {
-      z: 36,
+      z: 28,
       intensity: 2,
       fallback: <Fallback src="/render/planet4.png" style={{ padding: 8 }} />,
-      model: <Cube3d />,
+      model: <Planet4 />,
     },
   },
   {
@@ -89,10 +89,10 @@ const slides: TDetail[] = [
     content: tempCont,
     link: '',
     sceneProps: {
-      z: 32,
+      z: 26,
       intensity: 4,
       fallback: <Fallback src="/render/planet5.png" />,
-      model: <Cube3d />,
+      model: <Planet5 />,
     },
   },
 ]

@@ -147,6 +147,10 @@ export default function Home() {
             opacity: 0,
           },
         }}
+        headerProps={{
+          pl: matches ? 72 : 16,
+          pr: matches ? 56 : 16,
+        }}
         burgerProps={{
           className: clsx('animate__animated', {
             animate__fadeOut: open || matches,
@@ -183,7 +187,7 @@ export default function Home() {
         </div>
 
         {/* Subtitle */}
-        <SubTitle matches={matches} />
+        {done ? <SubTitle matches={matches} open={open} /> : null}
 
         {/* Gradient */}
         <div className="absolute-center gradient pointer-events-none" />
@@ -273,6 +277,27 @@ export default function Home() {
           </>
         </Box>
       ) : null}
+
+      {/* noise */}
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          zIndex: 2000,
+          width: '100vw',
+          height: '100vh',
+          pointerEvents: 'none',
+        }}
+      >
+        <img
+          className="object-fit-cover"
+          src="/images/noise.png"
+          alt=""
+          width="100%"
+          height="100%"
+        />
+      </Box>
     </>
   )
 }
@@ -359,62 +384,88 @@ function CubeItem(props: CubeItemProps) {
 
 type SubTitleProps = {
   matches: boolean
+  open: boolean
 }
 function SubTitle(props: SubTitleProps) {
-  const { matches } = props
+  const { matches, open } = props
   const root = useRef<HTMLDivElement>(null)
+  const margin = matches ? 72 : 16
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap
         .timeline()
         .set('.txt', { y: '100%' })
-        .to('.title0', { y: 0, opacity: 1, duration: 1.5, delay: 4 }, 0)
-        .to('.title1', { y: 0, opacity: 1, duration: 1.5, delay: 4 }, 0.5)
-        .to('.title2', { y: 0, opacity: 1, duration: 1.5, delay: 4 }, 1)
-        .to('.arrow', { opacity: 0.8, duration: 1.5, delay: 4 }, 2)
+        .to('.title0', { y: 0, opacity: 1, duration: 1.5 }, 0.5)
+        .to('.title1', { y: 0, opacity: 1, duration: 1.5 }, 1)
+        .to('.title2', { y: 0, opacity: 1, duration: 1.5 }, 1.75)
+        .to('.arrow', { opacity: 0.8, duration: 1.5 }, 2.5)
         .to('.title0', { y: '100%', opacity: 0, duration: 1.2 }, 10)
-        .to('.title1', { y: '100%', opacity: 0, duration: 1.2 }, 9.5)
-        .to('.title2', { y: '100%', opacity: 0, duration: 1 }, 9)
+        .to('.title1', { y: '100%', opacity: 0, duration: 1.2 }, 9.75)
+        .to('.title2', { y: '100%', opacity: 0, duration: 1 }, 9.5)
     }, root)
   }, [])
 
   return (
     <Box
       ref={root}
-      w="100%"
+      className={clsx('animate__animated', {
+        animate__fadeOut: open,
+        animate__fadeIn: !open,
+      })}
       sx={{
         position: 'absolute',
-        left: 16,
-        bottom: 48,
+        left: 0,
+        bottom: 64,
+        width: '100%',
+        pointerEvents: open ? 'none' : 'auto',
       }}
     >
-      <MaskBox>
-        <Text className="txt title0" fz={30} fw={300} lh={1.15} opacity={0}>
-          全球领先的
-        </Text>
-      </MaskBox>
-      <MaskBox>
-        <Text className="txt title1" fz={30} fw={300} lh={1.15} opacity={0}>
-          元宇宙创作平台
-        </Text>
-      </MaskBox>
-      <MaskBox>
-        <Group
-          className="txt title2"
-          fz={12}
-          fw={300}
-          mt={8}
-          spacing={12}
-          opacity={0}
-        >
-          <Text>独家引擎</Text>
-          <Divider orientation="vertical" />
-          <Text>快速传播</Text>
-          <Divider orientation="vertical" />
-          <Text>全平台适配</Text>
-        </Group>
-      </MaskBox>
+      <Box
+        sx={{
+          position: 'relative',
+          left: margin,
+        }}
+      >
+        <MaskBox>
+          <Text
+            className="txt title0"
+            fz={matches ? 48 : 30}
+            fw={300}
+            lh={1.15}
+            opacity={0}
+          >
+            {matches ? '' : '全球领先的'}
+          </Text>
+        </MaskBox>
+        <MaskBox>
+          <Text
+            className="txt title1"
+            fz={matches ? 48 : 30}
+            fw={300}
+            lh={1.15}
+            opacity={0}
+          >
+            {matches ? '全球领先的元宇宙创作平台' : '元宇宙创作平台'}
+          </Text>
+        </MaskBox>
+        <MaskBox>
+          <Group
+            className="txt title2"
+            fz={matches ? 16 : 12}
+            fw={300}
+            mt={8}
+            spacing={12}
+            opacity={0}
+          >
+            <Text>独家引擎</Text>
+            <Divider orientation="vertical" />
+            <Text>快速传播</Text>
+            <Divider orientation="vertical" />
+            <Text>全平台适配</Text>
+          </Group>
+        </MaskBox>
+      </Box>
       <Box
         className="arrow c-pointer"
         w={32}
@@ -423,7 +474,7 @@ function SubTitle(props: SubTitleProps) {
         sx={{
           position: 'absolute',
           bottom: 0,
-          right: 32,
+          right: margin,
           border: '1px solid white',
           borderRadius: 30,
           transition: 'opacity 500ms',

@@ -23,7 +23,7 @@ export default function Sect6() {
           maw={448}
           spacing={matches ? 'md' : 2}
         >
-          <Text fz="inherit">电话: 17877 766678</Text>
+          <Text fz="inherit">电话: 13484924056</Text>
           <Text fz="inherit">邮箱: maas@box.game</Text>
           <Text fz="inherit">
             地址: 广东省深圳市南山区南山街道信利康大厦30F

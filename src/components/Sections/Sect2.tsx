@@ -13,15 +13,15 @@ type CellProps = {
 const data: CellProps[] = [
   {
     img: '/images/sect2-0.png',
-    title: '全球领先的独家自研引擎',
+    title: '独家自研引擎',
     detail:
-      '区块乐园星球自主研发，基于WebGL，技术先进适用各种业务需求，可按需求定制功能自由度高，可快速创造各种数字场景。',
+      '自主研发，基于WebGL，技术先进适用各种业务场景，可按需求定制功能自由度高，可快速创造各种数字场景',
   },
   {
     img: '/images/sect2-1.png',
     title: '适合各种应用场景',
     detail:
-      '多端数据互通，可跨端跨平台应用基于WebGL，无需下载，方便快捷可快速嵌入APP、小程序、网站等',
+      '多端数据互通，可跨端跨平台应用无需下载，点击即用，方便快捷可快速嵌入APP、小程序、网站等',
   },
   {
     img: '/images/sect2-2.png',
@@ -33,7 +33,7 @@ const data: CellProps[] = [
     img: '/images/sect2-3.png',
     title: '一站式解决方案',
     detail:
-      '提供全方位的服务，可定制开发各种场景，提供元宇宙UGC工具、数字藏品等业务模块一站式接入',
+      '提供全方位的服务，可定制开发各种场景提供元宇宙UGC工具、数字藏品等业务模块一站式接入',
   },
 ]
 
@@ -93,8 +93,10 @@ export default function Sect2() {
       dragFree
       getEmblaApi={setEmbla}
       plugins={[autoplay.current]}
-      onMouseEnter={autoplay.current.stop}
-      onMouseLeave={() => autoplay.current.play()}
+      onMouseDown={autoplay.current.stop}
+      onMouseUp={() => autoplay.current.play()}
+      onTouchStart={autoplay.current.stop}
+      onTouchEnd={() => autoplay.current.play()}
     >
       {data.map((el, i) => (
         <Carousel.Slide key={`sect2-${i}`}>

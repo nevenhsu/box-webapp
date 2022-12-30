@@ -11,7 +11,7 @@ import type { BurgerProps, GroupProps } from '@mantine/core'
 type TopBarProps = {
   backdropProps?: BoxProps
   boxProps?: BoxProps
-  headerProps?: HeaderProps
+  headerProps?: BoxProps
   burgerProps?: Omit<BurgerProps, 'opened'>
   groupProps?: GroupProps
 }
