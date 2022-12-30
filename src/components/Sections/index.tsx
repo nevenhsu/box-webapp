@@ -36,7 +36,7 @@ export default function Sections() {
   return (
     <>
       <Box px={matches ? 72 : 16}>
-        <Divider mb={m} />
+        <Divider id="sect1" mb={m} />
         <Sect1 />
         <Divider id="sect2" my={m} />
         <Title title="能力优势" subtitle="Advantages" />

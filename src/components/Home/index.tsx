@@ -1,15 +1,17 @@
 import { useRef, useLayoutEffect, useState } from 'react'
 import clsx from 'clsx'
 import { gsap } from 'gsap'
-import { Box, Center, CloseButton, Text } from '@mantine/core'
+import { Box, Center, CloseButton, Text, Group, Divider } from '@mantine/core'
 import { useScrollLock, useHover, useMediaQuery } from '@mantine/hooks'
 import CarouselPage from 'components/CarouselPage'
 import TopBar from './TopBar'
 import Cube from './Cube'
 import Sections from 'components/Sections'
 import StyledButton from 'components/styled/StyledButton'
+import MaskBox from 'components/styled/MaskBox'
 import { fillArray, scrollIntoView } from 'utils/helper'
 import { IoAddSharp } from 'react-icons/io5'
+import { VscChevronDown } from 'react-icons/vsc'
 import { animations, cubes } from './data'
 import type { TCube } from './data'
 import './style.css'
@@ -23,7 +25,7 @@ export default function Home() {
 
   const [open, setOpen] = useState(false) // carouselPage
   const [load, setLoad] = useState(false) // line-image
-  const [done, setDone] = useState(false) // animation is done
+  const [done, setDone] = useState(false) // loading is done
   const [slide, setSlide] = useState(1)
   const [scrollLocked, setScrollLocked] = useScrollLock()
 
@@ -34,7 +36,7 @@ export default function Home() {
       // hide images
       gsap.set('.line-img', { width: '0%' })
       // hide header
-      gsap.set('.topBar', { width: '0%', opacity: 0 })
+      gsap.set('.topBar', { width: '0%' })
       //  hide cube & dust
       animations.forEach((el) => {
         gsap.set(el.target, { opacity: 0 })
@@ -55,9 +57,8 @@ export default function Home() {
           width: '100%',
           duration: 2.5,
         })
-        .call(() => setDone(true))
         .to('.topBar', { width: '100%', duration: 2 })
-        .to('.topBar-group', { opacity: 1, duration: 1 }, 4)
+        .call(() => setDone(true))
 
       // cube & dust
       animations.forEach((el) => {
@@ -109,6 +110,8 @@ export default function Home() {
     event: React.MouseEvent<HTMLImageElement, MouseEvent>,
     index: number
   ) => {
+    if (!done) return
+
     setOpen(true)
     setSlide(index)
     scrollIntoView('sect0')
@@ -130,25 +133,34 @@ export default function Home() {
             animate__fadeIn: !open,
           }),
         }}
+        groupProps={{
+          sx: {
+            animationDelay: done ? '0' : '4s',
+          },
+        }}
         boxProps={{
           className: clsx('topBar', 'animate__animated', {
             animate__fadeOut: open,
-            animate__fadeIn: !open && done,
+            animate__fadeIn: !open,
           }),
+          sx: {
+            opacity: 0,
+          },
         }}
         burgerProps={{
           className: clsx('animate__animated', {
             animate__fadeOut: open || matches,
-            animate__fadeIn: !matches && !open && done,
+            animate__fadeIn: !matches && !open,
           }),
           sx: {
             opacity: 0,
-            animationDelay: done ? '0' : '5s',
+            animationDelay: done ? '0' : '4s',
             pointerEvents: open ? 'none' : 'auto',
           },
         }}
       />
 
+      {/* Home */}
       <Center
         id="sect0"
         sx={{ position: 'relative', width: '100vw', height: '100vh' }}
@@ -169,6 +181,9 @@ export default function Home() {
             />
           </div>
         </div>
+
+        {/* Subtitle */}
+        <SubTitle matches={matches} />
 
         {/* Gradient */}
         <div className="absolute-center gradient pointer-events-none" />
@@ -204,6 +219,7 @@ export default function Home() {
             key={o.name}
             index={i}
             matches={matches}
+            done={done}
             onClick={(event) => handleClickCube(event, i)}
           />
         ))}
@@ -212,12 +228,18 @@ export default function Home() {
         <div className="circle pointer-events-none">
           <div className="circle-div absolute-center" />
         </div>
+      </Center>
 
-        {/* Details */}
+      <Sections />
+
+      {/* Details */}
+      {done ? (
         <Box
           className={clsx('details', { 'pointer-events-none': !open })}
           sx={{
             position: 'fixed',
+            top: 0,
+            left: 0,
             zIndex: 100,
             width: '100vw',
             height: '100vh',
@@ -250,9 +272,7 @@ export default function Home() {
             </Box>
           </>
         </Box>
-      </Center>
-
-      <Sections />
+      ) : null}
     </>
   )
 }
@@ -260,32 +280,53 @@ export default function Home() {
 type CubeItemProps = TCube & {
   index: number
   matches: boolean
+  done: boolean
   onClick: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void
 }
+
 function CubeItem(props: CubeItemProps) {
-  const { name, title, index, matches, onClick } = props
+  const { name, title, index, matches, done, onClick } = props
   const { hovered, ref } = useHover()
-  const showTxt = matches && hovered
+  const showTxt = matches && hovered && done
 
   return (
     <span
       ref={ref}
-      className={`p-absolute cube ${name} c-pointer`}
+      className={clsx(`p-absolute cube ${name}`, { 'c-pointer': done })}
       style={{
         width: 72,
         height: 72,
       }}
     >
       <span
-        className={`p-absolute animate__animated animate__infinite 
+        className={`
+      p-absolute 
+      animate__animated 
+      animate__infinite 
       animate__breathing${index % 2 > 0 ? 3 : 2}
       animate__${index % 2 > 0 ? 'slow' : 'slower'} 
       animate__delay-${index % 5}s`}
       >
-        <Cube className="cube-img" onClick={onClick} name={name} size={72} />
-        {matches ? null : (
+        <span
+          className={`
+          animate__animated 
+          animate__infinite 
+          animate__breathing 
+          animate__${index % 2 > 0 ? 'slow' : 'slower'} 
+          animate__delay-${index % 5}s
+          `}
+          style={{
+            display: 'block',
+            width: 72,
+            height: 72,
+          }}
+        >
+          <Cube className="cube-img" onClick={onClick} name={name} size={72} />
+        </span>
+
+        {!matches && done ? (
           <Text
-            className="absolute-horizontal"
+            className="absolute-horizontal animate__animated animate__fadeIn"
             fz={10}
             fw={500}
             bottom={2}
@@ -293,7 +334,7 @@ function CubeItem(props: CubeItemProps) {
           >
             {title}
           </Text>
-        )}
+        ) : null}
         <StyledButton
           className={clsx('animate__animated animate__faster', {
             animate__fadeIn: showTxt,
@@ -313,5 +354,87 @@ function CubeItem(props: CubeItemProps) {
         </StyledButton>
       </span>
     </span>
+  )
+}
+
+type SubTitleProps = {
+  matches: boolean
+}
+function SubTitle(props: SubTitleProps) {
+  const { matches } = props
+  const root = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap
+        .timeline()
+        .set('.txt', { y: '100%' })
+        .to('.title0', { y: 0, opacity: 1, duration: 1.5, delay: 4 }, 0)
+        .to('.title1', { y: 0, opacity: 1, duration: 1.5, delay: 4 }, 0.5)
+        .to('.title2', { y: 0, opacity: 1, duration: 1.5, delay: 4 }, 1)
+        .to('.arrow', { opacity: 0.8, duration: 1.5, delay: 4 }, 2)
+        .to('.title0', { y: '100%', opacity: 0, duration: 1.2 }, 10)
+        .to('.title1', { y: '100%', opacity: 0, duration: 1.2 }, 9.5)
+        .to('.title2', { y: '100%', opacity: 0, duration: 1 }, 9)
+    }, root)
+  }, [])
+
+  return (
+    <Box
+      ref={root}
+      w="100%"
+      sx={{
+        position: 'absolute',
+        left: 16,
+        bottom: 48,
+      }}
+    >
+      <MaskBox>
+        <Text className="txt title0" fz={30} fw={300} lh={1.15} opacity={0}>
+          全球领先的
+        </Text>
+      </MaskBox>
+      <MaskBox>
+        <Text className="txt title1" fz={30} fw={300} lh={1.15} opacity={0}>
+          元宇宙创作平台
+        </Text>
+      </MaskBox>
+      <MaskBox>
+        <Group
+          className="txt title2"
+          fz={12}
+          fw={300}
+          mt={8}
+          spacing={12}
+          opacity={0}
+        >
+          <Text>独家引擎</Text>
+          <Divider orientation="vertical" />
+          <Text>快速传播</Text>
+          <Divider orientation="vertical" />
+          <Text>全平台适配</Text>
+        </Group>
+      </MaskBox>
+      <Box
+        className="arrow c-pointer"
+        w={32}
+        h={32}
+        opacity={0}
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          right: 32,
+          border: '1px solid white',
+          borderRadius: 30,
+          transition: 'opacity 500ms',
+          '&:hover': {
+            opacity: '1 !important',
+          },
+        }}
+        onClick={() => scrollIntoView('sect1')}
+      >
+        <VscChevronDown className="absolute-center" size={16} />
+      </Box>
+    </Box>
   )
 }

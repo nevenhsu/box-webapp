@@ -1,16 +1,19 @@
+import clsx from 'clsx'
 import { useState, useEffect } from 'react'
 import { Header, Burger, Drawer, Stack, Box, Group } from '@mantine/core'
 import { useMantineTheme } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import StyledButton from 'components/styled/StyledButton'
 import { scrollIntoView } from 'utils/helper'
-import type { BoxProps, HeaderProps, BurgerProps } from '@mantine/core'
+import type { BoxProps, HeaderProps } from '@mantine/core'
+import type { BurgerProps, GroupProps } from '@mantine/core'
 
 type TopBarProps = {
   backdropProps?: BoxProps
   boxProps?: BoxProps
   headerProps?: HeaderProps
   burgerProps?: Omit<BurgerProps, 'opened'>
+  groupProps?: GroupProps
 }
 
 type Anchor = {
@@ -42,7 +45,8 @@ const links: Anchor[] = [
 ]
 
 export default function TopBar(props: TopBarProps) {
-  const { backdropProps, boxProps, headerProps, burgerProps } = props
+  const { backdropProps, boxProps, headerProps, burgerProps, groupProps } =
+    props
   const [opened, setOpened] = useState(false)
   const theme = useMantineTheme()
   const matches = useMediaQuery('(min-width: 576px)')
@@ -102,7 +106,15 @@ export default function TopBar(props: TopBarProps) {
           </Box>
 
           {matches ? (
-            <Group className="topBar-group" spacing={0} opacity={0}>
+            <Group
+              spacing={0}
+              opacity={0}
+              {...groupProps}
+              className={clsx(
+                'animate__animated animate__fadeIn animate__slower',
+                groupProps?.className
+              )}
+            >
               {links.map((el, i) => (
                 <StyledButton
                   key={`nav-${i}`}

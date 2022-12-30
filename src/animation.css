@@ -63,3 +63,25 @@
 .animate__breathing1 {
   animation-name: breathing1;
 }
+
+@keyframes breathing {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.1);
+  }
+
+  60% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate__breathing {
+  animation-name: breathing;
+}
