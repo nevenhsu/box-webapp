@@ -34,6 +34,7 @@ const data: CellProps[] = [
 
 function Cell(props: CellProps) {
   const { img, title, value, numFormat, numPrefix } = props
+  const matches = useMediaQuery('(min-width: 576px)')
   return (
     <Group align="end" noWrap>
       <Box
@@ -45,11 +46,11 @@ function Cell(props: CellProps) {
       >
         <img src={img} alt="" width="100%" />
       </Box>
-      <Box>
-        <Text fw={300} fz="xs">
+      <Box pos="relative" top={4}>
+        <Text fw={300} fz={matches ? 16 : 12}>
           {title}
         </Text>
-        <Text fw={300} fz={26}>
+        <Text fw={300} fz={matches ? 40 : 26} lh={1.1}>
           {numPrefix}
           {numeral(value).format(numFormat).toUpperCase()}
         </Text>
@@ -59,7 +60,7 @@ function Cell(props: CellProps) {
 }
 
 export default function Sect1() {
-  const matches = useMediaQuery('(min-width: 992px)')
+  const matches = useMediaQuery('(min-width: 1180px)')
   return (
     <Group spacing={matches ? 96 : 32}>
       {data.map((el) => (

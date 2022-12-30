@@ -40,6 +40,7 @@ const data: CellProps[] = [
 
 function Cell(props: CellProps) {
   const { img, content, links } = props
+  const matches = useMediaQuery('(min-width: 576px)')
   const matchesLarge = useMediaQuery('(min-width: 992px)')
   const { hovered, ref } = useHover()
   const color = hovered ? 'black' : 'white'
@@ -57,19 +58,24 @@ function Cell(props: CellProps) {
           transition: 'all 500ms',
         }}
       >
-        <Center pl={48} pr={24} py={24} sx={{ gap: 32 }}>
+        <Center
+          pl={matchesLarge ? 48 : 0}
+          pr={matchesLarge ? 24 : 0}
+          py={24}
+          sx={{ gap: 32 }}
+        >
           <Box
-            maw={220}
+            maw={256}
             h="100%"
             sx={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: matchesLarge ? 'start' : 'center',
               justifyContent: 'center',
-              gap: 24,
+              gap: matches ? 8 : 24,
             }}
           >
-            <Text fz="xs" fw={400}>
+            <Text fz={matches ? 16 : 12} fw={400}>
               {content}
             </Text>
             {matchesLarge ? (
@@ -77,7 +83,7 @@ function Cell(props: CellProps) {
             ) : (
               <Box sx={{ height: 120 }}>{img}</Box>
             )}
-            <Group>
+            <Group noWrap>
               {links.map((el) => (
                 <StyledButton
                   component="a"
@@ -85,7 +91,11 @@ function Cell(props: CellProps) {
                   key={el.txt}
                   variant="outline"
                   radius="xl"
+                  fz={matches ? 16 : 12}
                   colorScheme={hovered ? 'light' : 'dark'}
+                  sx={{
+                    padding: '8px 24px !important',
+                  }}
                 >
                   {el.txt}
                 </StyledButton>
@@ -94,7 +104,7 @@ function Cell(props: CellProps) {
           </Box>
           {matchesLarge ? (
             <>
-              <Box w="50%" maw={212}>
+              <Box w="50%" maw={212} miw={120}>
                 {img}
               </Box>
             </>

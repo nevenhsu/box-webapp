@@ -50,6 +50,7 @@ const data: CellProps[] = [
 
 function Cell(props: CellProps) {
   const { img, title, detail, link } = props
+  const matches = useMediaQuery('(min-width: 576px)')
   return (
     <>
       <AspectRatio
@@ -57,8 +58,8 @@ function Cell(props: CellProps) {
         sx={{
           overflow: 'hidden',
           border: '1px solid white',
-          borderRadius: 10,
-          marginBottom: 24,
+          borderRadius: matches ? 30 : 20,
+          marginBottom: 16,
         }}
       >
         <img
@@ -71,10 +72,10 @@ function Cell(props: CellProps) {
       </AspectRatio>
       <Group noWrap sx={{ justifyContent: 'space-between' }}>
         <Box>
-          <Text fz="lg" fw={500} lineClamp={1}>
+          <Text fz={matches ? 30 : 18} fw={500} lineClamp={1}>
             {title}
           </Text>
-          <Text fz="xs" fw={400} lineClamp={1}>
+          <Text fz={matches ? 16 : 12} fw={400} lineClamp={1}>
             {detail}
           </Text>
         </Box>

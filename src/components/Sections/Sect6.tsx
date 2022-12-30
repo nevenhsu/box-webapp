@@ -8,14 +8,14 @@ export default function Sect6() {
     <Group sx={{ justifyContent: matches ? 'end' : 'center' }}>
       <Group
         w="100%"
-        maw={720}
+        maw={880}
         sx={{
           border: '1px solid white',
           borderRadius: 900,
           justifyContent: 'space-between',
         }}
         py={48}
-        px={matches ? 96 : 48}
+        px={matches ? 120 : 48}
       >
         <Stack
           fz={matches ? 'md' : 'xs'}
@@ -32,7 +32,7 @@ export default function Sect6() {
         <Box>
           <Box
             w={matches ? 128 : 56}
-            mb={4}
+            mb={8}
             sx={{
               overflow: 'hidden',
               borderRadius: matches ? 20 : 8,
@@ -40,7 +40,7 @@ export default function Sect6() {
           >
             <img width="100%" src="/images/sect6-0.png" alt="" />
           </Box>
-          <Text ta="center" fz={8}>
+          <Text ta="center" fz={matches ? 12 : 8}>
             扫码添加微信
           </Text>
         </Box>

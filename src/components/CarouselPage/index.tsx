@@ -128,6 +128,7 @@ function Detail(props: DetailProps) {
             h={88}
             mb={32}
             sx={{ animationDelay: showTxt ? '500ms' : '' }}
+            offsetScrollbars
           >
             <Text fz="sm">{content}</Text>
           </ScrollArea>

@@ -154,11 +154,10 @@ export default function Home() {
         burgerProps={{
           className: clsx('animate__animated', {
             animate__fadeOut: open || matches,
-            animate__fadeIn: !matches && !open,
+            animate__fadeIn: !matches && !open && done,
           }),
           sx: {
             opacity: 0,
-            animationDelay: done ? '0' : '4s',
             pointerEvents: open ? 'none' : 'auto',
           },
         }}
@@ -459,9 +458,23 @@ function SubTitle(props: SubTitleProps) {
             opacity={0}
           >
             <Text>独家引擎</Text>
-            <Divider orientation="vertical" />
+            <Divider
+              orientation="vertical"
+              sx={{
+                position: 'relative',
+                top: matches ? 4 : 3,
+                height: matches ? 16 : 12,
+              }}
+            />
             <Text>快速传播</Text>
-            <Divider orientation="vertical" />
+            <Divider
+              orientation="vertical"
+              sx={{
+                position: 'relative',
+                top: matches ? 4 : 3,
+                height: matches ? 16 : 12,
+              }}
+            />
             <Text>全平台适配</Text>
           </Group>
         </MaskBox>

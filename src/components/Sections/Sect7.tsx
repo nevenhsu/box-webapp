@@ -63,7 +63,7 @@ export default function Sect7() {
           Box3引擎诚邀各合作伙伴，共同探索元宇宙发展路径，一起打造中国特色元宇宙。
         </Text>
       </Box>
-      <Stack spacing={matches ? 36 : 16}>
+      <Stack spacing={matches ? 36 : 16} maw={1140}>
         <Group sx={{ justifyContent: matchesLarge ? 'start' : 'end' }}>
           <Cell
             img="/images/sect7-0.png"
@@ -76,7 +76,19 @@ export default function Sect7() {
             <Text fz="0.72em">或扫码关注微信公众号</Text>
           </Cell>
           <Cell
+            ref={ref}
             img="/images/sect7-1.png"
+            groupProps={{
+              fz: matches ? 22 : 14,
+            }}
+          >
+            <Text fz="inherit">「BOX3元宇宙」</Text>
+            <Text fz="0.72em">抖音扫码关注</Text>
+          </Cell>
+        </Group>
+        <Group sx={{ justifyContent: 'end' }}>
+          <Cell
+            img="/images/sect7-2.png"
             groupProps={{
               fz: matches ? 22 : 14,
             }}
@@ -84,18 +96,6 @@ export default function Sect7() {
             <Text fz="0.72em">微信搜索</Text>
             <Text fz="inherit">「BOX3元宇宙」</Text>
             <Text fz="0.72em">或扫码关注微信公众号</Text>
-          </Cell>
-        </Group>
-        <Group sx={{ justifyContent: 'end' }}>
-          <Cell
-            ref={ref}
-            img="/images/sect7-2.png"
-            groupProps={{
-              fz: matches ? 22 : 14,
-            }}
-          >
-            <Text fz="inherit">「BOX3元宇宙」</Text>
-            <Text fz="0.72em">抖音扫码关注</Text>
           </Cell>
           <Cell
             groupProps={{

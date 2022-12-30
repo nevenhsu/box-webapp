@@ -39,6 +39,7 @@ const data: CellProps[] = [
 
 function Cell(props: CellProps) {
   const { img, title, detail } = props
+  const matches = useMediaQuery('(min-width: 576px)')
   return (
     <>
       <AspectRatio
@@ -46,8 +47,8 @@ function Cell(props: CellProps) {
         sx={{
           overflow: 'hidden',
           border: '1px solid white',
-          borderRadius: 10,
-          marginBottom: 18,
+          borderRadius: matches ? 30 : 20,
+          marginBottom: 16,
         }}
       >
         <img
@@ -60,10 +61,10 @@ function Cell(props: CellProps) {
       </AspectRatio>
 
       <Box>
-        <Text fz="lg" fw={500}>
+        <Text fz={matches ? 30 : 18} fw={500}>
           {title}
         </Text>
-        <Text fz="xs" fw={400}>
+        <Text fz={matches ? 16 : 12} fw={400} maw={matches ? 288 : 212}>
           {detail}
         </Text>
       </Box>
