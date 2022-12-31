@@ -95,7 +95,7 @@ export default function Sect7() {
           >
             <Text fz="0.72em">微信搜索</Text>
             <Text fz="inherit">「BOX3元宇宙」</Text>
-            <Text fz="0.72em">或扫码关注微信公众号</Text>
+            <Text fz="0.72em">或扫码关注微信视频号</Text>
           </Cell>
           <Cell
             groupProps={{
