@@ -107,7 +107,7 @@ function Detail(props: DetailProps) {
                 height: '100%',
               }}
             >
-              <Scene3d {...sceneProps} open={show} visible={active} />
+              <Scene3d {...sceneProps} open={show && open} visible={active} />
             </Box>
           </Box>
         </Box>

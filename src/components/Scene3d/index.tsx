@@ -31,7 +31,7 @@ function Model(props: ModelProps) {
 
   const ref = useRef<Group>(null)
   const animProps = useSpring<any>({
-    rotation: open ? [0, 0, 0] : [0, -Math.PI / 1.75, 0],
+    rotation: open ? [0, 0, 0] : [0, -Math.PI * 1.5, 0],
     config: {
       mass: 2,
       friction: 25,
