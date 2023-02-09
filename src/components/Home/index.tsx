@@ -1,8 +1,10 @@
-import { useRef, useLayoutEffect, useState } from 'react'
+import { useRef, useEffect, useLayoutEffect, useState } from 'react'
+import _ from 'lodash'
 import clsx from 'clsx'
 import { gsap } from 'gsap'
 import { Box, Center, CloseButton, Text, Group, Divider } from '@mantine/core'
-import { useScrollLock, useHover, useMediaQuery } from '@mantine/hooks'
+import { useScrollLock, useHover } from '@mantine/hooks'
+import { useMediaQuery, useInterval } from '@mantine/hooks'
 import CarouselPage from 'components/CarouselPage'
 import TopBar from './TopBar'
 import Cube from './Cube'
@@ -27,7 +29,17 @@ export default function Home() {
   const [load, setLoad] = useState(false) // line-image
   const [done, setDone] = useState(false) // loading is done
   const [slide, setSlide] = useState(1)
+  const [seconds, setSeconds] = useState(-5) // delay
   const [scrollLocked, setScrollLocked] = useScrollLock()
+  const interval = useInterval(() => setSeconds((s) => s + 1), 1000)
+  const showIndex = getShowIndex(seconds, cubes.length)
+
+  useEffect(() => {
+    if (!load) return
+
+    interval.start()
+    return interval.stop
+  }, [load])
 
   useLayoutEffect(() => {
     // init
@@ -221,6 +233,7 @@ export default function Home() {
             {...o}
             key={o.name}
             index={i}
+            showText={showIndex === i}
             matches={matches}
             done={done}
             onClick={(event) => handleClickCube(event, i)}
@@ -305,13 +318,14 @@ type CubeItemProps = TCube & {
   index: number
   matches: boolean
   done: boolean
+  showText: boolean
   onClick: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void
 }
 
 function CubeItem(props: CubeItemProps) {
-  const { name, title, index, matches, done, onClick } = props
+  const { name, title, index, matches, done, showText, onClick } = props
   const { hovered, ref } = useHover()
-  const showTxt = matches && hovered && done
+  const showTxt = showText || (matches && hovered && done)
 
   return (
     <span
@@ -501,4 +515,11 @@ function SubTitle(props: SubTitleProps) {
       </Box>
     </Box>
   )
+}
+
+function getShowIndex(sec: number, length: number) {
+  const delay = 5 // sec
+  const num = _.floor(sec / delay)
+  const index = num % length
+  return index
 }
