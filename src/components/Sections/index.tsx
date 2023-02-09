@@ -39,7 +39,6 @@ export default function Sections() {
         <Divider id="sect1" mb={m} />
         <Sect1 />
         <Divider id="sect2" my={m} />
-        <Title title="能力优势" subtitle="Advantages" />
         <Sect2 />
         <Divider id="sect3" my={m} />
         <Title title="资讯" subtitle="News" />
