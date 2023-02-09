@@ -52,12 +52,12 @@ const animations: AnimationData[] = [
 ]
 
 const cubes: TCube[] = [
-  { name: 'cube0', title: '区块乐园星球' },
-  { name: 'cube1', title: 'BOX元宇宙' },
-  { name: 'cube2', title: '智明佛学元宇宙' },
-  { name: 'cube3', title: '文旅星球' },
-  { name: 'cube4', title: 'UGC星球' },
-  { name: 'cube5', title: '氛途星球' },
+  { name: 'cube0', title: '展会星球' },
+  { name: 'cube1', title: 'UGC星球' },
+  { name: 'cube2', title: '文娱星球' },
+  { name: 'cube3', title: '城市品牌' },
+  { name: 'cube4', title: '文旅星球' },
+  { name: 'cube5', title: '企业品牌' },
 ]
 
 export { animations, cubes }
