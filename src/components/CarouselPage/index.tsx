@@ -31,7 +31,8 @@ type DetailProps = TDetail & {
 }
 
 function Detail(props: DetailProps) {
-  const { name, content, sceneProps, open, show, active, matches, i } = props
+  const { name, content, link, sceneProps, open, show, active, matches, i } =
+    props
   const root = useRef<HTMLImageElement>(null)
   const showTip = active && open && !show
   const showTxt = show && open
@@ -137,6 +138,7 @@ function Detail(props: DetailProps) {
             variant="outline"
             radius="xl"
             sx={{ animationDelay: showTxt ? '750ms' : '' }}
+            onClick={() => window.open(link, '_blank')}
           >
             进入星球
           </StyledButton>

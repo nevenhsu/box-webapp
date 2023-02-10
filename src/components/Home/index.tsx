@@ -29,7 +29,7 @@ export default function Home() {
   const [load, setLoad] = useState(false) // line-image
   const [done, setDone] = useState(false) // loading is done
   const [slide, setSlide] = useState(1)
-  const [seconds, setSeconds] = useState(-5) // delay
+  const [seconds, setSeconds] = useState(0) // for Cube Txt
   const [scrollLocked, setScrollLocked] = useScrollLock()
   const interval = useInterval(() => setSeconds((s) => s + 1), 1000)
   const showIndex = getShowIndex(seconds, cubes.length)
@@ -40,6 +40,12 @@ export default function Home() {
     interval.start()
     return interval.stop
   }, [load])
+
+  useEffect(() => {
+    if (!open) {
+      setSeconds(-5)
+    }
+  }, [open])
 
   useLayoutEffect(() => {
     // init
@@ -325,7 +331,7 @@ type CubeItemProps = TCube & {
 function CubeItem(props: CubeItemProps) {
   const { name, title, index, matches, done, showText, onClick } = props
   const { hovered, ref } = useHover()
-  const showTxt = showText || (matches && hovered && done)
+  const showTxt = matches && done && (showText || hovered)
 
   return (
     <span

@@ -1,3 +1,5 @@
+import { slides } from '../CarouselPage/data'
+
 type AnimationData = {
   target: string
   sec: number
@@ -51,13 +53,9 @@ const animations: AnimationData[] = [
   },
 ]
 
-const cubes: TCube[] = [
-  { name: 'cube0', title: '展会星球' },
-  { name: 'cube1', title: 'UGC星球' },
-  { name: 'cube2', title: '文娱星球' },
-  { name: 'cube3', title: '城市品牌' },
-  { name: 'cube4', title: '文旅星球' },
-  { name: 'cube5', title: '企业品牌' },
-]
+const cubes: TCube[] = slides.map((el, i) => ({
+  name: `cube${i}`,
+  title: el.name,
+}))
 
 export { animations, cubes }
